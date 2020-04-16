@@ -12,10 +12,39 @@ namespace OnlineIndieStore.Data
         {
             context.Database.EnsureCreated();
 
-            if (context.Products.Any())
+            if (context.Categories.Any())
             {
                 return;
             }
+
+            var categories = new Category[]
+            {
+                new Category
+                {
+                    CategoryName = "PhoneCases"
+                },
+                new Category
+                {
+                    CategoryName = "Audio"
+                },
+                new Category
+                {
+                    CategoryName = "Notebooks"
+                },
+                new Category
+                {
+                    CategoryName = "Sleep"
+                },
+                new Category
+                {
+                    CategoryName = "WaterBottles"
+                }
+            };
+            foreach (Category category in categories)
+            {
+                context.Categories.Add(category);
+            }
+            context.SaveChanges();
 
             var products = new Product[]
             {
@@ -59,36 +88,8 @@ namespace OnlineIndieStore.Data
             {
                 context.Products.Add(product);
             }
-            context.SaveChanges();
+           //  context.SaveChanges();
 
-            var categories = new Category[]
-            {
-                new Category
-                {
-                    CategoryName = "PhoneCases"
-                },
-                new Category
-                {
-                    CategoryName = "Audio"
-                },
-                new Category
-                {
-                    CategoryName = "Notebooks"
-                },
-                new Category
-                {
-                    CategoryName = "Sleep"
-                },
-                new Category
-                {
-                    CategoryName = "WaterBottles"
-                }
-            };
-            foreach (Category category in categories)
-            {
-                context.Categories.Add(category);
-            }
-            context.SaveChanges();
 
             var productcategories = new ProductCategory[]
             {

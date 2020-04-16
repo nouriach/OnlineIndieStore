@@ -34,7 +34,11 @@ namespace OnlineIndieStore.Controllers
             }
 
             var product = await _context.Products
+                .Include(pc => pc.ProductCategories)
+                    .ThenInclude(c => c.Category)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (product == null)
             {
                 return NotFound();
@@ -56,11 +60,18 @@ namespace OnlineIndieStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageUrl")] Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes");
             }
             return View(product);
         }
@@ -84,40 +95,35 @@ namespace OnlineIndieStore.Controllers
         // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Price,Description,ImageUrl")] Product product)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != product.ID)
+          if (id == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            var productToUpdate = await _context.Products.FirstOrDefaultAsync(p => p.ID == id);
+            if (await TryUpdateModelAsync<Product>(
+                productToUpdate,
+                "",
+               p => p.Name, p => p.Price, p => p.Description, p => p.ImageUrl ))
             {
                 try
                 {
-                    _context.Update(product);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException)
                 {
-                    if (!ProductExists(product.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "Unable to save changes.");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productToUpdate);
         }
 
         // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -125,12 +131,18 @@ namespace OnlineIndieStore.Controllers
             }
 
             var product = await _context.Products
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (product == null)
             {
                 return NotFound();
             }
 
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Delete failed.Try again.";
+            }
             return View(product);
         }
 
@@ -140,9 +152,21 @@ namespace OnlineIndieStore.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if (product == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
 
         private bool ProductExists(int id)
