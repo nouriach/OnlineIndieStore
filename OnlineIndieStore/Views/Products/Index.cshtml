@@ -37,8 +37,9 @@
                 Description
             </th>
             <th>
-                ImageURL
-            </th>
+           </th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -55,7 +56,13 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
+                <img src="@Html.DisplayFor(modelItem => item.ImageUrl)" />
+            </td>
+            <td>
+                <button class="btn btn-primary">Add to Favourites</button>
+            </td>
+            <td>
+                <button class="btn btn-primary">Add to Basket</button>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
