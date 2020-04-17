@@ -6,7 +6,7 @@ namespace OnlineIndieStore.Models
     public class Category
     {
         // Primary Key
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+       // [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CategoryID { get; set; }
 
         // Properties
