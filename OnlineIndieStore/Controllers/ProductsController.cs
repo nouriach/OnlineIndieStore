@@ -20,10 +20,21 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParam"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var products = from p in _context.Products
@@ -50,7 +61,8 @@ namespace OnlineIndieStore.Controllers
                     break;
             }
 
-            return View(await products.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Products/Details/5
