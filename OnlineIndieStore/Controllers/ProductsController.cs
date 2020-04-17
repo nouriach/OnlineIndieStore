@@ -20,13 +20,19 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParam"] = sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["CurrentFilter"] = searchString;
 
             var products = from p in _context.Products
                            select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()));
+            }
 
             switch (sortOrder)
             {
