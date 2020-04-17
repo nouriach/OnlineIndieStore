@@ -8,22 +8,15 @@ namespace OnlineIndieStore.Data
 {
     public class DbInitializer
     {
-
         public static void Initialize(AppDbContext context)
         {
             context.Database.EnsureCreated();
 
-            if (context.ProductCategories.Any())
+            if (context.Categories.Any())
             {
                 return;
             }
-            InitializeCategories(context);
-            InitializeProducts(context);
-            InitializeProductCategories(context);
-        }
 
-        public AppDbContext InitializeCategories(AppDbContext context)
-        {
             var categories = new Category[]
             {
                 new Category
@@ -52,10 +45,7 @@ namespace OnlineIndieStore.Data
                 context.Categories.Add(category);
             }
             context.SaveChanges();
-            return 
-        }
-        public static void InitializeProducts(AppDbContext context)
-        {
+
             var products = new Product[]
             {
                new Product
@@ -98,10 +88,9 @@ namespace OnlineIndieStore.Data
             {
                 context.Products.Add(product);
             }
-        }
+           //  context.SaveChanges();
 
-        public static void InitializeProductCategories (AppDbContext context)
-        {
+
             var productcategories = new ProductCategory[]
             {
                 new ProductCategory { ProductID=1, CategoryID=1 },
