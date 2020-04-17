@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using OnlineIndieStore.ViewModels;
 
 namespace OnlineIndieStore.Data
 {
@@ -25,7 +24,5 @@ namespace OnlineIndieStore.Data
             modelBuilder.Entity<ProductCategory>().ToTable("ProductCategory");
             modelBuilder.Entity<Product>().ToTable("Product");
         }
-
-        public DbSet<OnlineIndieStore.ViewModels.SubmitProductViewModel> SubmitProductViewModel { get; set; }
     }
 }
