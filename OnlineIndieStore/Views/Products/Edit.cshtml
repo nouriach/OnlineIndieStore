@@ -5,7 +5,6 @@
 }
 
 <h1>Edit</h1>
-
 <h4>Product</h4>
 <hr />
 <div class="row">
@@ -32,6 +31,28 @@
                 <label asp-for="ImageUrl" class="control-label"></label>
                 <input asp-for="ImageUrl" class="form-control" />
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductCategories" class="control-label"></label>
+                <input asp-for="ProductCategories" class="form-control" />
+                <span asp-validation-for="ProductCategories" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{var categories = Model.ProductCategories;
+                    if(categories.Count == 0)
+                    {
+                        <p>No Categories</p>
+                    }
+                    else
+                    {
+                        foreach(var category in categories)
+                        {
+                            <label asp-for="category.Category" class="control-label"></label>
+                            <input asp-for="@category.Category" class="control-label" />
+                            <span asp-validation-for="@category.Category" class="text-danger"></span>
+                        }
+                    }
+                }
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
