@@ -98,13 +98,13 @@ namespace OnlineIndieStore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageUrl")] Product product)
+        public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageUrl, Selection, CategoryName, ProductID, CategoryID")] ProductCategory pc)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(product);
+                    _context.ProductCategories.Add(pc);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -113,7 +113,7 @@ namespace OnlineIndieStore.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes");
             }
-            return View(product);
+            return View(pc);
         }
 
         // GET: Products/Edit/5
