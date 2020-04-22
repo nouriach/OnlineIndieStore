@@ -62,15 +62,8 @@ namespace OnlineIndieStore.Controllers
             }
 
             int pageSize = 3;
-            return View(await PaginatedList<Product>.CreateAsync(
-                products
-                .Include(p => p.ProductCategories)
-                    .ThenInclude(c => c.Category)
-                .AsNoTracking(),
-                pageNumber ?? 1,
-                pageSize));
+            return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -85,16 +78,6 @@ namespace OnlineIndieStore.Controllers
                     .ThenInclude(c => c.Category)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
-
-            ProductCategory category = new ProductCategory
-            {
-                Category = new Category()
-                {
-                    CategoryName = "Audio",
-                }
-            };
-
-            product.ProductCategories.Add(category);
 
             if (product == null)
             {
@@ -141,11 +124,7 @@ namespace OnlineIndieStore.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(pc => pc.ProductCategories)
-                    .ThenInclude(c => c.Category)
-                .FirstOrDefaultAsync(m => m.ID == id);
-
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -160,16 +139,15 @@ namespace OnlineIndieStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(int? id)
         {
-            if (id == null)
+          if (id == null)
             {
                 return NotFound();
             }
-            var productToUpdate = await _context.Products
-                .FirstOrDefaultAsync(p => p.ID == id);
+            var productToUpdate = await _context.Products.FirstOrDefaultAsync(p => p.ID == id);
             if (await TryUpdateModelAsync<Product>(
                 productToUpdate,
                 "",
-               p => p.Name, p => p.Price, p => p.Description, p => p.ImageUrl, p => p.ProductCategories))
+               p => p.Name, p => p.Price, p => p.Description, p => p.ImageUrl ))
             {
                 try
                 {

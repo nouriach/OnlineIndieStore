@@ -12,7 +12,7 @@ namespace OnlineIndieStore.Data
         {
             context.Database.EnsureCreated();
 
-            if (context.ProductCategories.Any())
+            if (context.Products.Any())
             {
                 return;
             }
@@ -21,7 +21,6 @@ namespace OnlineIndieStore.Data
             {
                new Product
                {
-                   ID = 0,
                    Name="Hargraft - Wild Case",
                    Price= 86,
                    Description="lorum ipsum",
@@ -29,7 +28,6 @@ namespace OnlineIndieStore.Data
                },
                new Product
                {
-                   ID = 1,
                    Name="Might Vibe Spotify Player",
                    Price= 80,
                    Description="lorum ipsum",
@@ -37,7 +35,6 @@ namespace OnlineIndieStore.Data
                },
                new Product
                {
-                   ID = 2,
                    Name="Totebook (2 Pack)",
                    Price= 20,
                    Description="lorum ipsum",
@@ -45,7 +42,6 @@ namespace OnlineIndieStore.Data
                },
                new Product
                {
-                   ID = 3,
                    Name="Oura Smart Ring",
                    Price= 314,
                    Description="lorum ipsum",
@@ -53,7 +49,6 @@ namespace OnlineIndieStore.Data
                },
                new Product
                {
-                   ID = 4,
                    Name="Klean Kanteen Insulated TKPro",
                    Price= 45,
                    Description="lorum ipsum",
@@ -64,6 +59,7 @@ namespace OnlineIndieStore.Data
             {
                 context.Products.Add(product);
             }
+            context.SaveChanges();
 
             var categories = new Category[]
             {
@@ -92,14 +88,17 @@ namespace OnlineIndieStore.Data
             {
                 context.Categories.Add(category);
             }
+            context.SaveChanges();
+
+
 
             var productcategories = new ProductCategory[]
             {
-                new ProductCategory { ProductID=0, CategoryID=0, Selection = Selection.Tech },
-                new ProductCategory { ProductID=1, CategoryID=1, Selection = Selection.Audio },
-                new ProductCategory { ProductID=2, CategoryID=2, Selection = Selection.Bottles },
-                new ProductCategory { ProductID=3, CategoryID=3, Selection = Selection.Footwear },
-                new ProductCategory { ProductID=4, CategoryID=4, Selection = Selection.Headware },
+                new ProductCategory { ProductID=0, CategoryID=0 },
+                new ProductCategory { ProductID=1, CategoryID=1 },
+                new ProductCategory { ProductID=2, CategoryID=2 },
+                new ProductCategory { ProductID=3, CategoryID=3 },
+                new ProductCategory { ProductID=4, CategoryID=4 },
             };
             foreach (ProductCategory pc in productcategories)
             {
