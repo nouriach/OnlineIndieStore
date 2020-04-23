@@ -44,26 +44,14 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: Categories/Create
-        public async Task<IActionResult> Create(string? productName )
-        {
-            if (productName == null)
-            {
-                return RedirectToAction("Create", "Products");
-            }
-
-            //Product newProduct = new Product();
-
-            //Product findProduct = await _context.Products
-            //    .FindAsync(productName);
-
-            //newProduct.Name = findProduct.Name;
-
-            //ViewBag.LatestProduct = newProduct.Name;
-;
+        public IActionResult Create()
+        { 
             return View();
         }
 
         // POST: Categories/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryID,CategoryName")] Category category)

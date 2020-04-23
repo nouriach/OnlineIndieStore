@@ -8,91 +8,23 @@
 
 <h4>ProductCategory</h4>
 <hr />
-@*<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProductID" class="control-label"></label>
-                <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Product.Name" class="control-label"></label>
-                <select asp-for="Product.Name" class="form-control" asp-items="ViewBag.ProductName "></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryID" class="control-label"></label>
-                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category.CategoryName" class="control-label"></label>
-                <select asp-for="Category.CategoryName" class="form-control" asp-items="ViewBag.CategoryName"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Selection" class="control-label"></label>
-                <select asp-for="Selection" class="form-control" asp-items="ViewBag.Selection"></select>
-                <span asp-validation-for="Selection" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>*@
-
-@*/**************************/*@
-
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductID" class="control-label"></label>
-                <input asp-for="ProductID" class="form-control" />
-                <span asp-validation-for="ProductID" class="text-danger"></span>
+                <select asp-for="ProductID" class ="form-control" asp-items="ViewBag.ProductID"></select>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Product.Name" class="control-label"></label>
-                <input asp-for="Product.Name" class="form-control" />
-                <span asp-validation-for="Product.Name" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Product.Description" class="control-label"></label>
-                <input asp-for="Product.Description" class="form-control" />
-                <span asp-validation-for="Product.Description" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Product.Price" class="control-label"></label>
-                <input asp-for="Product.Price" class="form-control" />
-                <span asp-validation-for="Product.Price" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Product.ImageUrl" class="control-label"></label>
-                <input asp-for="Product.ImageUrl" class="form-control" />
-                <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
-            </div>
-
             <div class="form-group">
                 <label asp-for="CategoryID" class="control-label"></label>
-                <input asp-for="CategoryID" class="form-control" />
-                <span asp-validation-for="CategoryID" class="text-danger"></span>
+                <select asp-for="CategoryID" class ="form-control" asp-items="ViewBag.CategoryID"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Category.CategoryName" class="control-label"></label>
-                <input asp-for="Category.CategoryName" class="form-control" />
-                <span asp-validation-for="Category.CategoryName" class="text-danger"></span>
-            </div>
-
             <div class="form-group">
                 <label asp-for="Selection" class="control-label"></label>
-                <select asp-for="Selection" class="form-control" asp-items="Html.GetEnumSelectList<Selection>()"> </select>
+                <input asp-for="Selection" class="form-control" />
                 <span asp-validation-for="Selection" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
