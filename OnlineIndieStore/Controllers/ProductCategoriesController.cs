@@ -28,6 +28,7 @@ namespace OnlineIndieStore.Controllers
             return View(await appDbContext.ToListAsync());
         }
 
+
         // GET: ProductCategories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,16 +53,18 @@ namespace OnlineIndieStore.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
+            ViewData["CategoryName"] = new SelectList(_context.Categories, "CategoryName", "CategoryName");
+
             ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID");
+            ViewData["ProductName"] = new SelectList(_context.Products, "Name", "Name");
+
             return View();
         }
 
         // POST: ProductCategories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Selection")] ProductCategory productCategory)
+        public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Selection, Product.Name, Product.Description, Product.Price, Product.ImageUrl, Category.CategoryName")] ProductCategory productCategory)
         {
             if (ModelState.IsValid)
             {
