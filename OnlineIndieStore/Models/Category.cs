@@ -3,6 +3,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineIndieStore.Models
 {
+    //public enum CategoryName
+    //{
+    //    PhoneCases, 
+    //    Charging, 
+    //    PowerBanks, 
+    //    WirelessChargers, 
+    //    AppleAccesories, 
+    //    Keyboards, 
+    //    Audio, 
+    //    Notebooks, 
+    //    Stationery, 
+    //    Sleep, 
+    //    WaterBottles, 
+    //    LunchBoxes, 
+    //    Clocks, 
+    //    Watches, 
+    //    Wallets, 
+    //    Kitchenware, 
+    //    Backpacks, 
+    //    Headwear, 
+    //    Footwear
+    //}
     public class Category
     {
         // Primary Key
