@@ -8,7 +8,48 @@
 
 <h4>Category</h4>
 <hr />
-<div class="row">
+
+<form asp-action="Create" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search categories by name: <input type="text" name="searchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" />
+        </p>
+    </div>
+    <div>
+        @{
+            if (ViewBag.Results.Count == 0)
+            {
+                @foreach (var result in ViewBag.Options)
+                {
+                    <div style="padding-right:15px;margin-left:200px">
+                        <input type="checkbox" name="category" value="@result" />
+                        <label>
+                            @result
+                        </label>
+                    </div>
+                }
+            }
+            else if (ViewBag.Results.Count > 0)
+            {
+                @foreach (var searchResult in ViewBag.Results)
+                {
+                    <div style="padding-right:15px;margin-left:200px">
+                        <input type="checkbox" name="category" value="@searchResult" />
+                        <label>
+                            @searchResult
+                        </label>
+                    </div>
+                }
+            }
+        }
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@*<div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -27,7 +68,7 @@
             </div>
         </form>
     </div>
-</div>
+</div>*@
 
 <div>
     <a asp-action="Index">Back to List</a>

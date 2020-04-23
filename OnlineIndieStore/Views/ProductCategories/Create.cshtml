@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Selection" class="control-label"></label>
-                <input asp-for="Selection" class="form-control" />
+                <select asp-for="Selection" class="form-control" asp-items="Html.GetEnumSelectList<Selection>()"> </select>
                 <span asp-validation-for="Selection" class="text-danger"></span>
             </div>
             <div class="form-group">

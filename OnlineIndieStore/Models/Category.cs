@@ -3,28 +3,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineIndieStore.Models
 {
-    //public enum CategoryName
-    //{
-    //    PhoneCases, 
-    //    Charging, 
-    //    PowerBanks, 
-    //    WirelessChargers, 
-    //    AppleAccesories, 
-    //    Keyboards, 
-    //    Audio, 
-    //    Notebooks, 
-    //    Stationery, 
-    //    Sleep, 
-    //    WaterBottles, 
-    //    LunchBoxes, 
-    //    Clocks, 
-    //    Watches, 
-    //    Wallets, 
-    //    Kitchenware, 
-    //    Backpacks, 
-    //    Headwear, 
-    //    Footwear
-    //}
+    public enum CategoryName
+    {
+        PhoneCases,
+        Charging,
+        PowerBanks,
+        WirelessChargers,
+        AppleAccesories,
+        Keyboards,
+        Audio,
+        Notebooks,
+        Stationery,
+        Sleep,
+        WaterBottles,
+        LunchBoxes,
+        Clocks,
+        Watches,
+        Wallets,
+        Kitchenware,
+        Backpacks,
+        Headwear,
+        Footwear
+    }
     public class Category
     {
         // Primary Key
@@ -32,7 +32,7 @@ namespace OnlineIndieStore.Models
         public int CategoryID { get; set; }
 
         // Properties
-        public string CategoryName { get; set; }
+        public CategoryName? CategoryName { get; set; }
 
         // Foreign Key
 

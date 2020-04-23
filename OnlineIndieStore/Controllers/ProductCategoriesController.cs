@@ -69,6 +69,10 @@ namespace OnlineIndieStore.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Products");
             }
+
+            // This is being created to help the dropdown list, but we don't need a drop down list?
+            // We need the current productCategory name to be shown and then it says: "please select a category"
+           
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", productCategory.CategoryID);
             ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID", productCategory.ProductID);
             return View(productCategory);

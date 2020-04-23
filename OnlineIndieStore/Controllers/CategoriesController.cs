@@ -43,9 +43,28 @@ namespace OnlineIndieStore.Controllers
             return View(category);
         }
 
+        //(string? currentFilter, string? searchString)
         // GET: Categories/Create
-        public IActionResult Create()
-        { 
+        public IActionResult Create(string searchString)
+        {
+
+            List<string> categories = Enum.GetNames(typeof(CategoryName)).ToList();
+            List<string> availableCategories = new List<string>();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                foreach(var option in categories)
+                {
+                    if (option.ToUpper().Contains(searchString.ToUpper())) 
+                    {
+                        availableCategories.Add(option);
+                    }
+                }
+            }
+
+            ViewBag.Results = availableCategories.ToList();
+            ViewBag.Options = categories;
+
             return View();
         }
 
