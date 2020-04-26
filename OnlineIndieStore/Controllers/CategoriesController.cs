@@ -43,12 +43,11 @@ namespace OnlineIndieStore.Controllers
             return View(category);
         }
 
-        //(string? currentFilter, string? searchString)
         // GET: Categories/Create
         public IActionResult Create(string searchString)
         {
 
-            List<string> categories = Enum.GetNames(typeof(CategoryName)).ToList();
+            List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
             List<string> availableCategories = new List<string>();
 
             if (!String.IsNullOrEmpty(searchString))
@@ -61,8 +60,7 @@ namespace OnlineIndieStore.Controllers
                     }
                 }
             }
-
-            ViewBag.Results = availableCategories.ToList();
+            ViewBag.Results = availableCategories.OrderBy(x => x).ToList();
             ViewBag.Options = categories;
 
             return View();
@@ -73,12 +71,24 @@ namespace OnlineIndieStore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryID,CategoryName")] Category category)
+        public async Task<IActionResult> Create([Bind("CategoryName")] List<Category> category)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                if (category.Count == 1)
+                {
+                    _context.Add(category);
+                    await _context.SaveChangesAsync();
+                }
+                else if (category.Count > 1)
+                {
+                    foreach (var selection in category)
+                    {
+                        _context.Add(category);
+                        await _context.SaveChangesAsync();
+                    }
+                }
                 return RedirectToAction("Create", "ProductCategories");
             }
             return View(category);

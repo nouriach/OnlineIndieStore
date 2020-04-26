@@ -10,12 +10,16 @@
 <hr />
 
 <form asp-action="Create" method="get">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-actions no-color">
         <p>
             Search categories by name: <input type="text" name="searchString" value="@ViewData["currentFilter"]" />
             <input type="submit" value="Search" class="btn btn-default" />
         </p>
     </div>
+</form>
+
+<form asp-action="Create" method="post">
     <div>
         @{
             if (ViewBag.Results.Count == 0)
