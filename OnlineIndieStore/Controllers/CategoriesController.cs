@@ -71,27 +71,32 @@ namespace OnlineIndieStore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryName")] List<Category> category)
+        public async Task<IActionResult> Create([Bind("CategoryName", "IsChecked")] List<CategoryName> IsChecked)
         {
+            /********
+             
+            1. The passed argument needs to be a List<Category>
+            2. I think there needs to be a hidden 'id' field on the checkbox
+            3. Why does 'IsChecked' worked but 'CategoryName' currently doesn't?
+            4. Looks like each instance of the below doesn't bring a new ID with. No auto-increment.
 
-            if (ModelState.IsValid)
+            https://www.codeproject.com/articles/1078491/creating-forms-in-asp-net-mvc
+            https://sensibledev.com/mvc-checkbox-and-checkboxlist/
+
+            ************/
+            foreach (var c in IsChecked)
             {
-                if (category.Count == 1)
+                var findCategoryId = _context.Categories.Count();
+                Category newCat = new Category
                 {
-                    _context.Add(category);
-                    await _context.SaveChangesAsync();
-                }
-                else if (category.Count > 1)
-                {
-                    foreach (var selection in category)
-                    {
-                        _context.Add(category);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-                return RedirectToAction("Create", "ProductCategories");
+                    CategoryID = findCategoryId,
+                    CategoryName = c,
+                    IsChecked = true
+                };
+                _context.Categories.Add(newCat);
+                await _context.SaveChangesAsync();
             }
-            return View(category);
+            return RedirectToAction("Index", "Categories");
         }
 
         // GET: Categories/Edit/5

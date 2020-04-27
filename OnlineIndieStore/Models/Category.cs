@@ -33,6 +33,7 @@ namespace OnlineIndieStore.Models
 
         // Properties
         public CategoryName? CategoryName { get; set; }
+        public bool IsChecked { get; set; }
 
         // Foreign Key
 

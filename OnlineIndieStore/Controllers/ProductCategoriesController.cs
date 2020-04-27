@@ -51,8 +51,12 @@ namespace OnlineIndieStore.Controllers
         // GET: ProductCategories/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
-            ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID");
+            //ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
+            //ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID");
+
+            ViewData["CategoryName"] = new SelectList(_context.Categories, "CategoryName", "CategoryName");
+            ViewData["ProductName"] = new SelectList(_context.Products, "Name", "Name");
+
             return View();
         }
 
