@@ -106,7 +106,7 @@ namespace OnlineIndieStore.Controllers
                 {
                     _context.Add(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Create", "Categories");
+                    return RedirectToAction("Index", "Products");
                 }
             }
             catch (DbUpdateException)

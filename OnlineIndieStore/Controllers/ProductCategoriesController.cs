@@ -65,21 +65,41 @@ namespace OnlineIndieStore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Selection")] ProductCategory productCategory)
+        public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Product, Category, Selection")] ProductCategory productCategory)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(productCategory);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Products");
-            }
 
-            // This is being created to help the dropdown list, but we don't need a drop down list?
-            // We need the current productCategory name to be shown and then it says: "please select a category"
+            var syncProduct = _context.Products.Where(x => x.Name == productCategory.Product.Name).FirstOrDefault();
+            var syncCategory = _context.Categories.Where(x => x.CategoryName == productCategory.Category.CategoryName).FirstOrDefault();
+
+            //foreach(var prodcat in _context.ProductCategories)
+            //{
+            //    if (prodcat.ProductID == syncProduct.ID)
+            //    {
+            //        prodcat.Category.CategoryName
+            //    }
+            //}
+            ProductCategory pc = new ProductCategory
+            {
+                CategoryID = syncCategory.CategoryID,
+                ProductID = syncProduct.ID,
+                Selection = productCategory.Selection
+            };
+
+            _context.Add(pc);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Products");
+
+            //if(ModelState.IsValid)
+            //{
+
+            //    _context.Add(productCategory);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction("Index", "Products");
+            //}
            
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", productCategory.CategoryID);
-            ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID", productCategory.ProductID);
-            return View(productCategory);
+            //ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", productCategory.CategoryID);
+            //ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID", productCategory.ProductID);
+            //return View(productCategory);
         }
 
         // GET: ProductCategories/Edit/5
