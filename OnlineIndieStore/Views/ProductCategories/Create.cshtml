@@ -1,0 +1,45 @@
+﻿@model OnlineIndieStore.Models.ProductCategory
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ProductCategory</h4>
+<hr />
+
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Product.Name" class="control-label"></label>
+                <select asp-for="Product.Name" class="form-control" asp-items="ViewBag.ProductName"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category.CategoryName" class="control-label"></label>
+                <select asp-for="Category.CategoryName" class="form-control" asp-items="ViewBag.CategoryName"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Selection" class="control-label"></label>
+                <select asp-for="Selection" class="form-control" asp-items="Html.GetEnumSelectList<Selection>()"> </select>
+                <span asp-validation-for="Selection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

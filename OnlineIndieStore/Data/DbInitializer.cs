@@ -61,34 +61,34 @@ namespace OnlineIndieStore.Data
             }
             context.SaveChanges();
 
-            var categories = new Category[]
-            {
-                new Category
-                {
-                    CategoryName = "PhoneCases"
-                },
-                new Category
-                {
-                    CategoryName = "Audio"
-                },
-                new Category
-                {
-                    CategoryName = "Notebooks"
-                },
-                new Category
-                {
-                    CategoryName = "Sleep"
-                },
-                new Category
-                {
-                    CategoryName = "WaterBottles"
-                }
-            };
-            foreach (Category category in categories)
-            {
-                context.Categories.Add(category);
-            }
-            context.SaveChanges();
+            //var categories = new Category[]
+            //{
+            //    new Category
+            //    {
+            //        CategoryName = "PhoneCases"
+            //    },
+            //    new Category
+            //    {
+            //        CategoryName = "Audio"
+            //    },
+            //    new Category
+            //    {
+            //        CategoryName = "Notebooks"
+            //    },
+            //    new Category
+            //    {
+            //        CategoryName = "Sleep"
+            //    },
+            //    new Category
+            //    {
+            //        CategoryName = "WaterBottles"
+            //    }
+            //};
+            //foreach (Category category in categories)
+            //{
+            //    context.Categories.Add(category);
+            //}
+            //context.SaveChanges();
 
 
 
