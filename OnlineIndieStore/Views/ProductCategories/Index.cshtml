@@ -5,13 +5,40 @@
 }
 
 <h1>Index</h1>
-
+@*Revisit:
+https://mdbootstrap.com/docs/jquery/components/cards/*@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
+<ul class="nav nav-pills d-flex justify-content-around pb-3">
+    <li class="nav-item">
+        <a class="nav-link active" asp-action="#" asp-route-order="#">Order by Name</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-action="#" asp-route-order="#">Filter Categories</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-action="#" asp-route-order="#">Filter Selection</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort Products</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Sort By Name Ascending</a>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameDescending">Sort By Name Descending</a>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByPriceAscending">Sort By Price: Lowest to Highest</a>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByPriceDescending">Sort By Price: Highest to Lowest</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+    </li>
+</ul>
+
 <div class="row col-md-12">
-    @foreach(var prod in Model)
+    @foreach (var prod in Model)
     {
         <div class="container col-md-4">
             <div class="card">
@@ -28,10 +55,12 @@
                 <li class="list-group-item">
                     Categories: @prod.Category.CategoryName
                 </li>
-            
+
             </ul>
             <div class="card-body">
                 <p class="card-text">Selection: @prod.Selection</p>
+                <p class="card-text">Price: @prod.Product.Price </p>
+
                 <div class="d-flex justify-content-around">
                     <a href="#" class="btn btn-primary">Add to Basket</a>
                     <a href="#" class="btn btn-success">Favourite</a>
@@ -66,32 +95,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCategoryID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Selection)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductCategoryID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductCategoryID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductCategoryID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCategoryID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Selection)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductCategoryID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ProductCategoryID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ProductCategoryID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

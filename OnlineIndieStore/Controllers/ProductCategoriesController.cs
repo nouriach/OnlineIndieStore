@@ -20,12 +20,39 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? order)
         {
             var appDbContext = _context.ProductCategories
                 .Include(p => p.Category)
                 .Include(p => p.Product);
-            return View(await appDbContext.ToListAsync());
+
+            switch (order)
+            {
+            case "ByPriceAscending":
+                return View(
+                    await appDbContext
+                    .OrderBy(x => x.Product.Price)
+                    .ToListAsync()
+                    );
+            case "ByPriceDescending":
+                return View(
+                    await appDbContext
+                    .OrderByDescending(x => x.Product.Price)
+                    .ToListAsync()
+                    );
+            case "ByNameDescending":
+                return View(
+                    await appDbContext
+                    .OrderByDescending(x => x.Product.Name)
+                    .ToListAsync()
+                    );
+            default:
+                return View(
+                    await appDbContext
+                    .OrderBy(x => x.Product.Name)
+                    .ToListAsync()
+                    );
+            }
         }
 
         // GET: ProductCategories/Details/5
@@ -96,7 +123,7 @@ namespace OnlineIndieStore.Controllers
             //    await _context.SaveChangesAsync();
             //    return RedirectToAction("Index", "Products");
             //}
-           
+
             //ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", productCategory.CategoryID);
             //ViewData["ProductID"] = new SelectList(_context.Products, "ID", "ID", productCategory.ProductID);
             //return View(productCategory);
