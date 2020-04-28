@@ -20,25 +20,37 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public async Task<IActionResult> Index(string? order)
+        public async Task<IActionResult> Index(string? order, string? selectionOrder, string? categoryOrder)
         {
             var appDbContext = _context.ProductCategories
                 .Include(p => p.Category)
                 .Include(p => p.Product);
+                //.Include(s => s.Selection);
+
 
             List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
             ViewBag.CatOptions = categories;
-
             List<string> selections = Enum.GetNames(typeof(Selection)).OrderBy(y => y).ToList();
             ViewBag.SelOptions = selections;
+
+            // Don't know where to continue
+
+            //if (!String.IsNullOrEmpty(selectionOrder))
+            //{
+            //    return View(
+            //        await appDbContext
+            //        .OrderBy(x => x)
+            //        .ToListAsync()
+            //        );
+            //}
 
             switch (order)
             {
             case "ByPriceAscending":
                 return View(
                     await appDbContext
-                    .OrderBy(x => x.Product.Price)
-                    .ToListAsync()
+                        .OrderBy(x => x.Product.Price)
+                        .ToListAsync()
                     );
             case "ByPriceDescending":
                 return View(
@@ -53,7 +65,11 @@ namespace OnlineIndieStore.Controllers
                     .ToListAsync()
                     );
             default:
-                return View(await appDbContext.OrderBy(x => x.Product.Name).ToListAsync());
+                return View(
+                    await appDbContext
+                    .OrderBy(x => x.Product.Name)
+                    .ToListAsync()
+                    );
             }
         }
 
@@ -90,8 +106,6 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Product, Category, Selection")] ProductCategory productCategory)
