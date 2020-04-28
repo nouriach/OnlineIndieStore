@@ -12,14 +12,27 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
 </p>
 
 <ul class="nav nav-pills d-flex justify-content-around pb-3">
-    <li class="nav-item">
-        <a class="nav-link active" asp-action="#" asp-route-order="#">Order by Name</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filter Categories</a>
+        <div class="dropdown-menu">
+            @foreach (var catOption in @ViewBag.CatOptions)
+            {
+                <a class="dropdown-item" asp-action="Index" asp-route-order="@catOption">@catOption</a>
+            }
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
+        </div>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-action="#" asp-route-order="#">Filter Categories</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-action="#" asp-route-order="#">Filter Selection</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filter Selection</a>
+        <div class="dropdown-menu">
+            @foreach (var selOption in @ViewBag.SelOptions)
+            {
+                <a class="dropdown-item" asp-action="Index" asp-route-order="@selOption">@selOption</a>
+            }
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
+        </div>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort Products</a>

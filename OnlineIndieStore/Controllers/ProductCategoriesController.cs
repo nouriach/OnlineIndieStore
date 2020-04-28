@@ -26,6 +26,12 @@ namespace OnlineIndieStore.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.Product);
 
+            List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
+            ViewBag.CatOptions = categories;
+
+            List<string> selections = Enum.GetNames(typeof(Selection)).OrderBy(y => y).ToList();
+            ViewBag.SelOptions = selections;
+
             switch (order)
             {
             case "ByPriceAscending":
@@ -47,11 +53,7 @@ namespace OnlineIndieStore.Controllers
                     .ToListAsync()
                     );
             default:
-                return View(
-                    await appDbContext
-                    .OrderBy(x => x.Product.Name)
-                    .ToListAsync()
-                    );
+                return View(await appDbContext.OrderBy(x => x.Product.Name).ToListAsync());
             }
         }
 
@@ -148,8 +150,6 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductCategoryID,ProductID,CategoryID,Selection")] ProductCategory productCategory)
