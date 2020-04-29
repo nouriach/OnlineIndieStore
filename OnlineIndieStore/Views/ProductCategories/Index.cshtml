@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineIndieStore.Models.ProductCategory>
+﻿@model IEnumerable<OnlineIndieStore.Models.Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -55,25 +55,33 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
     {
         <div class="container col-md-4">
             <div class="card">
-                <img class="card-img-top" alt="text" src="@prod.Product.ImageUrl" />
+                <img class="card-img-top" alt="text" src="@prod.ImageUrl" />
             </div>
             <div class="card-body">
-                <h5 class="card-title">@prod.Product.Name</h5>
+                <h4 class="card-title">@prod.Name</h4>
                 <p class="card-text">
-                    @prod.Product.Description
+                    @prod.Description
                 </p>
             </div>
-            <ul class="list-group list-group-flush">
-
-                <li class="list-group-item">
-                    Categories: @prod.Category.CategoryName
-                </li>
-
-            </ul>
             <div class="card-body">
-                <p class="card-text">Selection: @prod.Selection</p>
-                <p class="card-text">Price: @prod.Product.Price </p>
+                <h5>Categories</h5>
+                @foreach (var item in prod.ProductCategories)
+                {
+                    <p>
+                        @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                    </p>
+                }
+            </div>
+            <div class="card-body">
+                <h5 class="card-text">Selection:</h5>
 
+                @foreach (var selection in prod.ProductCategories)
+                {
+                    <p class="card-text">
+                        @selection.Selection 
+                    </p>
+                }
+                <p class="card-text">Price: @prod.Price </p>
                 <div class="d-flex justify-content-around">
                     <a href="#" class="btn btn-primary">Add to Basket</a>
                     <a href="#" class="btn btn-success">Favourite</a>
@@ -83,26 +91,28 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
     }
 </div>
 
+@*OLD TABLE BELOW*@
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductCategoryID)
+               @*@Html.DisplayNameFor(model => model.ProductCategoryID)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Selection)
+                @*@Html.DisplayNameFor(model => model.Selection)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product.ID)
+                @Html.DisplayNameFor(model => model.ID)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product.Name)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category.CategoryID)
+                @*@Html.DisplayNameFor(model => model.Category.CategoryID)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category.CategoryName)
+                @*@Html.DisplayNameFor(model => model.Category.CategoryName)*@
             </th>
             <th></th>
         </tr>
@@ -112,27 +122,27 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProductCategoryID)
+                    @*@Html.DisplayFor(modelItem => item.ProductCategoryID)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Selection)
+                    @*@Html.DisplayFor(modelItem => item.Selection)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Product.ID)
+                    @Html.DisplayFor(modelItem => item.ID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Product.Name)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.CategoryID)
+                    @*@Html.DisplayFor(modelItem => item.Category.CategoryID)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                    @*@Html.DisplayFor(modelItem => item.Category.CategoryName)*@
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductCategoryID">Edit</a> |
+                    @*<a asp-action="Edit" asp-route-id="@item.ProductCategoryID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.ProductCategoryID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductCategoryID">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductCategoryID">Delete</a>*@
                 </td>
             </tr>
         }

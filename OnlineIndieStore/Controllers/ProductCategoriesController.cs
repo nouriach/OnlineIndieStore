@@ -22,9 +22,14 @@ namespace OnlineIndieStore.Controllers
         // GET: ProductCategories
         public async Task<IActionResult> Index(string? order)
         {
-            var appDbContext = _context.ProductCategories
-                .Include(p => p.Category)
-                .Include(p => p.Product);
+            //var appDbContext = _context.ProductCategories
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Product);
+
+            var appDbContext = _context.Products
+                .Include(pc => pc.ProductCategories)
+                    .ThenInclude(c => c.Category)
+                .AsNoTracking();
 
             List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
             ViewBag.CatOptions = categories;
@@ -37,23 +42,23 @@ namespace OnlineIndieStore.Controllers
             case "ByPriceAscending":
                 return View(
                     await appDbContext
-                    .OrderBy(x => x.Product.Price)
+                    .OrderBy(x => x.Price)
                     .ToListAsync()
                     );
             case "ByPriceDescending":
                 return View(
                     await appDbContext
-                    .OrderByDescending(x => x.Product.Price)
+                    .OrderByDescending(x => x.Price)
                     .ToListAsync()
                     );
             case "ByNameDescending":
                 return View(
                     await appDbContext
-                    .OrderByDescending(x => x.Product.Name)
+                    .OrderByDescending(x => x.Name)
                     .ToListAsync()
                     );
             default:
-                return View(await appDbContext.OrderBy(x => x.Product.Name).ToListAsync());
+                return View(await appDbContext.OrderBy(x => x.Name).ToListAsync());
             }
         }
 

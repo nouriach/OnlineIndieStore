@@ -22,6 +22,9 @@ namespace OnlineIndieStore.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            var appDbContext =_context.Products;
+
+            // Search Box
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParam"] = sortOrder == "Price" ? "price_desc" : "Price";
@@ -62,6 +65,32 @@ namespace OnlineIndieStore.Controllers
             }
 
             int pageSize = 3;
+
+            // Filter products
+            //switch (order)
+            //{
+            //    case "ByPriceAscending":
+            //        return View(
+            //            await appDbContext
+            //            .OrderBy(x => x.Price)
+            //            .ToListAsync()
+            //            );
+            //    case "ByPriceDescending":
+            //        return View(
+            //            await appDbContext
+            //            .OrderByDescending(x => x.Price)
+            //            .ToListAsync()
+            //            );
+            //    case "ByNameDescending":
+            //        return View(
+            //            await appDbContext
+            //            .OrderByDescending(x => x.Name)
+            //            .ToListAsync()
+            //            );
+            //    default:
+            //        return View(await appDbContext.OrderBy(x => x.Name).ToListAsync());
+            //}
+
             return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
