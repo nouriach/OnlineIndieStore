@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
+using OnlineIndieStore.VMs;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -119,30 +120,64 @@ namespace OnlineIndieStore.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            //List<Category> categorySelectList = new List<Category>();
+            //foreach (var i in _context.Categories)
+            //{
+            //    categorySelectList.Add(i);
+            //}
+
+            //Product newProduct = new Product();
+            //ProductCategory newProdCat = new ProductCategory();
+
+            //ProductCategoryViewModel produCatViewModel = new ProductCategoryViewModel()
+            //{
+            //    //Category = categorySelectList,
+            //    Product = newProduct,
+            //    ProductCategory = newProdCat
+            //};
+
             return View();
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageUrl")] Product product)
+        public async Task<IActionResult> Create(ProductCategoryViewModel newProdCat)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(product);
+                    if (newProdCat.Product != null)
+                    {
+                        Product newProduct = newProdCat.Product;
+                        _context.Add(newProduct);
+                        _context.SaveChanges();
+                    }
+                    var syncProduct = _context.Products
+                        .Where(x => x.Name == newProdCat.Product.Name)
+                        .FirstOrDefault();
+                    var syncCategory = _context.Categories
+                        .Where(x => x.CategoryName == newProdCat.Category.CategoryName)
+                        .FirstOrDefault();
+
+                    ProductCategory pc = new ProductCategory
+                    {
+                        CategoryID = syncCategory.CategoryID,
+                        ProductID = syncProduct.ID,
+                        Selection = newProdCat.ProductCategory.Selection
+                    };
+
+                    _context.Add(pc);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", "Products");
+                    return RedirectToAction("Index", "ProductCategories");
                 }
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Unable to save changes");
             }
-            return View(product);
+            return View(newProdCat);
         }
 
         // GET: Products/Edit/5

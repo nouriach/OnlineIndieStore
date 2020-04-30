@@ -95,23 +95,18 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Product, Category, Selection")] ProductCategory productCategory)
         {
 
-            var syncProduct = _context.Products.Where(x => x.Name == productCategory.Product.Name).FirstOrDefault();
-            var syncCategory = _context.Categories.Where(x => x.CategoryName == productCategory.Category.CategoryName).FirstOrDefault();
+            var syncProduct = _context.Products
+                .Where(x => x.Name == productCategory.Product.Name)
+                .FirstOrDefault();
+            var syncCategory = _context.Categories
+                .Where(x => x.CategoryName == productCategory.Category.CategoryName)
+                .FirstOrDefault();
 
-            //foreach(var prodcat in _context.ProductCategories)
-            //{
-            //    if (prodcat.ProductID == syncProduct.ID)
-            //    {
-            //        prodcat.Category.CategoryName
-            //    }
-            //}
             ProductCategory pc = new ProductCategory
             {
                 CategoryID = syncCategory.CategoryID,
