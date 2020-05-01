@@ -9,7 +9,7 @@ namespace OnlineIndieStore.VMs
     public class ProductCategoryViewModel
     {
         public Product Product { get; set; }
-        public Category Category { get; set; }
+        public List<CategoryName> Category { get; set; }
         public ProductCategory ProductCategory { get; set; }
 
     }

@@ -74,19 +74,36 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
             </div>
             <div class="card-body">
                 <h5 class="card-text">Selection:</h5>
-
-                @foreach (var selection in prod.ProductCategories)
+                @*UPDATE HERE*@
+                @*@foreach (var selection in prod.ProductCategories)
                 {
                     <p class="card-text">
-                        @selection.Selection 
+                        @selection.Selection
                     </p>
+                }*@
+
+                @{
+                    string test = "placeholder";
+
+                    foreach (var selectionPossibility in ViewBag.SelOptions)
+                    {
+                        foreach (var productSelection in prod.ProductCategories)
+                        {
+                            if (productSelection.Selection.ToString() == selectionPossibility)
+                            {
+                                test = @productSelection.Selection.ToString();
+                            }
+                        }
+                    }
+                    <p>@test</p>
                 }
-                <p class="card-text">Price: @prod.Price </p>
-                <div class="d-flex justify-content-around">
-                    <a href="#" class="btn btn-primary">Add to Basket</a>
-                    <a href="#" class="btn btn-success">Favourite</a>
-                </div>
-            </div>
+
+                        <p class="card-text">Price: @prod.Price </p>
+                        <div class="d-flex justify-content-around">
+                            <a href="#" class="btn btn-primary">Add to Basket</a>
+                            <a href="#" class="btn btn-success">Favourite</a>
+                        </div>
+                    </div>
         </div>
     }
 </div>

@@ -34,13 +34,20 @@
             <span asp-validation-for="@Model.Product.ImageUrl" class="text-danger"></span>
         </div>
         @*CATEGORY*@
-        <div class="form-group">
-            <label asp-for="@Model.Category.CategoryName " class="control-label"></label>
-            <select asp-for="@Model.Category.CategoryName " class="form-control" asp-items="Html.GetEnumSelectList<CategoryName>()"></select>
+    <div class="form-group">
+        <label asp-for="@Model.Category"></label>
+            <select class="form-control" asp-for="@Model.Category">
+                @foreach (var selectCategory in @ViewBag.Options)
+                {
+                    <option>@selectCategory</option>
+                }
+            </select>
         </div>
+
+        @*SELECTION*@
         <div class="form-group">
-            <label asp-for="@Model.ProductCategory.Selection" class="control-label"></label>
-            <select asp-for="@Model.ProductCategory.Selection" asp-items="Html.GetEnumSelectList<Selection>()"></select>
+            <label asp-for="@Model.ProductCategory.Selection"></label>
+            <select class="form-control" asp-for="@Model.ProductCategory.Selection" asp-items="Html.GetEnumSelectList<Selection>()"></select>
         </div>
 
         @*SUBMIT*@

@@ -120,21 +120,8 @@ namespace OnlineIndieStore.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            //List<Category> categorySelectList = new List<Category>();
-            //foreach (var i in _context.Categories)
-            //{
-            //    categorySelectList.Add(i);
-            //}
-
-            //Product newProduct = new Product();
-            //ProductCategory newProdCat = new ProductCategory();
-
-            //ProductCategoryViewModel produCatViewModel = new ProductCategoryViewModel()
-            //{
-            //    //Category = categorySelectList,
-            //    Product = newProduct,
-            //    ProductCategory = newProdCat
-            //};
+            List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
+            ViewBag.Options = categories;
 
             return View();
         }
@@ -148,6 +135,8 @@ namespace OnlineIndieStore.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                   List<ProductCategory> pc = new List<ProductCategory>();
+
                     if (newProdCat.Product != null)
                     {
                         Product newProduct = newProdCat.Product;
@@ -157,19 +146,29 @@ namespace OnlineIndieStore.Controllers
                     var syncProduct = _context.Products
                         .Where(x => x.Name == newProdCat.Product.Name)
                         .FirstOrDefault();
-                    var syncCategory = _context.Categories
-                        .Where(x => x.CategoryName == newProdCat.Category.CategoryName)
-                        .FirstOrDefault();
 
-                    ProductCategory pc = new ProductCategory
+                    if (newProdCat.Category.Count > 0)
                     {
-                        CategoryID = syncCategory.CategoryID,
-                        ProductID = syncProduct.ID,
-                        Selection = newProdCat.ProductCategory.Selection
-                    };
+                        foreach(var test in newProdCat.Category)
+                        {
+                            var syncCategory = _context.Categories
+                                .Where(x => x.CategoryName == test)
+                                .FirstOrDefault();
 
-                    _context.Add(pc);
-                    await _context.SaveChangesAsync();
+                            ProductCategory newTest = new ProductCategory();
+
+                            newTest.CategoryID = syncCategory.CategoryID;
+                            newTest.ProductID = syncProduct.ID;
+                            newTest.Selection = newProdCat.ProductCategory.Selection;
+
+                            pc.Add(newTest);
+                        }
+                    }
+                    foreach (var newProdCatInstance in pc)
+                    {
+                        _context.Add(newProdCatInstance);
+                        await _context.SaveChangesAsync();
+                    }
                     return RedirectToAction("Index", "ProductCategories");
                 }
             }
