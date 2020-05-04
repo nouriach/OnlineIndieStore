@@ -20,21 +20,16 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public async Task<IActionResult> Index(string? order, string? selectionOrder, string? categoryOrder)
+        public async Task<IActionResult> Index(string? order)
         {
+            //var appDbContext = _context.ProductCategories
+            //    .Include(p => p.Category)
+            //    .Include(p => p.Product);
 
             var appDbContext = _context.Products
                 .Include(pc => pc.ProductCategories)
                     .ThenInclude(c => c.Category)
                 .AsNoTracking();
-
-            var productCategory = _context.ProductCategories
-                .Include(p => p.Product)
-                .Include(p => p.Category)
-                .Where(c => c.CategoryID == 5)
-                .AsNoTracking();
-                
-
 
             List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
             ViewBag.CatOptions = categories;
@@ -42,56 +37,28 @@ namespace OnlineIndieStore.Controllers
             List<string> selections = Enum.GetNames(typeof(Selection)).OrderBy(y => y).ToList();
             ViewBag.SelOptions = selections;
 
-            if (categoryOrder != null)
-            {
-                // store all category IDs that match the passed categoryOrder
-                int categoryId = 0;
-
-                // get all ProductCategories
-                var getRelevantProducts = _context.ProductCategories;
-
-                // get all Categories
-                var productsByCategory = _context.Categories;
-
-                // store all final Products
-                List<Product> finalProducts = new List<Product>();
-
-                // Go through every available 'Category' and store the ID
-                foreach (var findCategoryId in productsByCategory)
-                {
-                    if (findCategoryId.CategoryName.ToString() == categoryOrder)
-                    {
-                        categoryId = findCategoryId.CategoryID;
-                    }
-                }
-
-
-
-                return View();
-            }
-
             switch (order)
             {
-                case "ByPriceAscending":
-                    return View(
-                        await productCategory
-                        .OrderBy(x => x.Product.Price)
-                        .ToListAsync()
-                        );
-                case "ByPriceDescending":
-                    return View(
-                        await productCategory
-                        .OrderByDescending(x => x.Product.Price)
-                        .ToListAsync()
-                        );
-                case "ByNameDescending":
-                    return View(
-                        await productCategory
-                        .OrderByDescending(x => x.Product.Name)
-                        .ToListAsync()
-                        );
-                default:
-                    return View(await productCategory.OrderBy(x => x.Product.Name).ToListAsync());
+            case "ByPriceAscending":
+                return View(
+                    await appDbContext
+                    .OrderBy(x => x.Price)
+                    .ToListAsync()
+                    );
+            case "ByPriceDescending":
+                return View(
+                    await appDbContext
+                    .OrderByDescending(x => x.Price)
+                    .ToListAsync()
+                    );
+            case "ByNameDescending":
+                return View(
+                    await appDbContext
+                    .OrderByDescending(x => x.Name)
+                    .ToListAsync()
+                    );
+            default:
+                return View(await appDbContext.OrderBy(x => x.Name).ToListAsync());
             }
         }
 
@@ -254,42 +221,3 @@ namespace OnlineIndieStore.Controllers
         }
     }
 }
-
-
-
-//public async Task<StakeholderResponse> GetServiceAccessStakeholder(CreateServiceStakeholder request)
-//{
-//    var serviceStakeholder = await _context.ServiceAccess
-//        .AsNoTracking()
-//        .Where(x =>
-//            x.StakeholderID == request.StakeholderID &&
-//            x.ServiceID == request.ServiceID)
-//        .Select(ObjectMapper.GetStakeholderResponseFromServiceAccess())
-//        .FirstOrDefaultAsync();
-
-//    if (serviceStakeholder == null)
-//        throw new NotFoundException("Could not find service stakeholder");
-
-//    return serviceStakeholder;
-//}
-
-
-    //// start building a query to this table
-    //IQueryable<Service> query = _context.Service
-    //            .AsNoTracking()
-    //                .Where(x => x.Archived == false);                   //check service not archived
-    //                                                                    // check if tag exists
-    //if (!string.IsNullOrEmpty(tag))
-    //{
-    //    // filters services, checks if service has the tag that has been passed through as an argument
-    //    query = query
-    //        .Where(x => x.ServiceTags
-    //            .Any(z => z.Tag.Name == tag));
-    //}
-
-    //IQueryable<ServicesItem> transformedQuery = query
-    //    .OrderBy(x => x.Name) // orders by name
-    //    .Select(ObjectMapper.GetServicesItemFromService());  // transforms Iqueryable from Service to ServicesItem
-    //                                                         // send query to database and return result as a list
-    //var executedQueryResult = await transformedQuery.ToListAsync();
-
