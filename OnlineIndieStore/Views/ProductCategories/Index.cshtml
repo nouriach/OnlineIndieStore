@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineIndieStore.Models.Product>
+﻿@model OnlineIndieStore.Models.ProductCategory
 
 @{
     ViewData["Title"] = "Index";
@@ -17,7 +17,7 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
         <div class="dropdown-menu">
             @foreach (var catOption in @ViewBag.CatOptions)
             {
-                <a class="dropdown-item" asp-action="Index" asp-route-order="@catOption">@catOption</a>
+                <a class="dropdown-item" asp-action="Index" asp-route-categoryOrder="@catOption">@catOption</a>
             }
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
@@ -28,7 +28,7 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
         <div class="dropdown-menu">
             @foreach (var selOption in @ViewBag.SelOptions)
             {
-                <a class="dropdown-item" asp-action="Index" asp-route-order="@selOption">@selOption</a>
+                <a class="dropdown-item" asp-action="Index" asp-route-selectionOrder="@selOption">@selOption</a>
             }
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
@@ -51,21 +51,21 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
 </ul>
 
 <div class="row col-md-12">
-    @foreach (var prod in Model)
+    @foreach (var prod in Model.Product.ProductCategories)
     {
         <div class="container col-md-4">
             <div class="card">
-                <img class="card-img-top" alt="text" src="@prod.ImageUrl" />
+                <img class="card-img-top" alt="text" src="@prod.Product.ImageUrl" />
             </div>
             <div class="card-body">
-                <h4 class="card-title">@prod.Name</h4>
+                <h4 class="card-title">@prod.Product.Name</h4>
                 <p class="card-text">
-                    @prod.Description
+                    @prod.Product.Description
                 </p>
             </div>
             <div class="card-body">
                 <h5>Categories</h5>
-                @foreach (var item in prod.ProductCategories)
+                @foreach (var item in prod.Category.ProductCategories)
                 {
                     <p>
                         @Html.DisplayFor(modelItem => item.Category.CategoryName)
@@ -75,19 +75,13 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
             <div class="card-body">
                 <h5 class="card-text">Selection:</h5>
                 @*UPDATE HERE*@
-                @*@foreach (var selection in prod.ProductCategories)
-                {
-                    <p class="card-text">
-                        @selection.Selection
-                    </p>
-                }*@
 
-                @{
+                @*@{
                     string test = "placeholder";
 
                     foreach (var selectionPossibility in ViewBag.SelOptions)
                     {
-                        foreach (var productSelection in prod.ProductCategories)
+                        foreach (var productSelection in prod.Selection )
                         {
                             if (productSelection.Selection.ToString() == selectionPossibility)
                             {
@@ -95,10 +89,10 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
                             }
                         }
                     }
-                    <p>@test</p>
+                    <p>@test</p>*@
                 }
 
-                        <p class="card-text">Price: @prod.Price </p>
+                        <p class="card-text">Price: @prod.Product.Price </p>
                         <div class="d-flex justify-content-around">
                             <a href="#" class="btn btn-primary">Add to Basket</a>
                             <a href="#" class="btn btn-success">Favourite</a>
@@ -109,59 +103,3 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
 </div>
 
 @*OLD TABLE BELOW*@
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-               @*@Html.DisplayNameFor(model => model.ProductCategoryID)*@
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Selection)*@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Category.CategoryID)*@
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Category.CategoryName)*@
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.ProductCategoryID)*@
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.Selection)*@
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.Category.CategoryID)*@
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.Category.CategoryName)*@
-                </td>
-                <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.ProductCategoryID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductCategoryID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductCategoryID">Delete</a>*@
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
