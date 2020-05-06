@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
+using OnlineIndieStore.VMs;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -20,12 +21,8 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public async Task<IActionResult> Index(string? order)
+        public async Task<IActionResult> Index(string? order, string? categoryOrder)
         {
-            //var appDbContext = _context.ProductCategories
-            //    .Include(p => p.Category)
-            //    .Include(p => p.Product);
-
             var appDbContext = _context.Products
                 .Include(pc => pc.ProductCategories)
                     .ThenInclude(c => c.Category)
@@ -37,28 +34,120 @@ namespace OnlineIndieStore.Controllers
             List<string> selections = Enum.GetNames(typeof(Selection)).OrderBy(y => y).ToList();
             ViewBag.SelOptions = selections;
 
+            List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
+
+            foreach (var item in appDbContext)
+            {
+                // instantiate View Model
+                DisplayProductViewModel displayPvm = new DisplayProductViewModel();
+                // Create list of Categories to store incoming Categories
+                List<Category> associatedCategories = new List<Category>();
+
+                // Set new View Model Product to selected Product in the database
+                displayPvm.Product = item;
+
+                // For each Categories with this database Product loop through all the assigned Categories and add them
+                foreach (var t in item.ProductCategories)
+                {
+                    associatedCategories.Add(t.Category);
+                }
+
+                // Add all the Categories to the ViewModel Category
+                displayPvm.Categories = associatedCategories;
+
+                // Add new View Model to the ViewModel list
+                displayProds.Add(displayPvm);
+            }
+
+            if (categoryOrder != null)
+            {
+                var returnFilteredCategories = FilterCategory(categoryOrder);
+                return View(returnFilteredCategories);
+            }
+
             switch (order)
             {
             case "ByPriceAscending":
-                return View(
-                    await appDbContext
-                    .OrderBy(x => x.Price)
-                    .ToListAsync()
-                    );
+                    return View(
+                        displayProds.OrderBy(x => x.Product.Price).ToList());
             case "ByPriceDescending":
                 return View(
-                    await appDbContext
-                    .OrderByDescending(x => x.Price)
-                    .ToListAsync()
+                    displayProds
+                    .OrderByDescending(x => x.Product.Price)
+                    .ToList()
                     );
             case "ByNameDescending":
                 return View(
-                    await appDbContext
-                    .OrderByDescending(x => x.Name)
-                    .ToListAsync()
+                     displayProds
+                    .OrderByDescending(x => x.Product.Name)
+                    .ToList()
                     );
             default:
-                return View(await appDbContext.OrderBy(x => x.Name).ToListAsync());
+                return View(displayProds.OrderBy(x=> x.Product.Name).ToList());
+            }
+        }
+
+        public List<DisplayProductViewModel> FilterCategory(string categoryOrder)
+        {
+            var appDbContext = _context.ProductCategories
+                 .Include(p => p.Product)
+                 .Include(c => c.Category)
+                .AsNoTracking();
+
+            try
+            {
+                // This is a method that takes the Enum value of Category and returns the CategoryID
+                int newCategoryIndex = FindCategoryIndexInTable(categoryOrder);
+                List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
+                List<Category> catList = new List<Category>();
+
+                var filteredList = appDbContext.Where(x => x.CategoryID == newCategoryIndex).ToList();
+
+                foreach(var i in filteredList)
+                {
+                    DisplayProductViewModel dp = new DisplayProductViewModel();
+                    dp.Product = i.Product;
+
+                    dp.Categories = appDbContext
+                        .Where(x => x.ProductID == i.ProductID)
+                        .Select(x => x.Category)
+                        .ToList();
+
+                    displayProds.Add(dp);
+                }
+
+                return displayProds.ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private int FindCategoryIndexInTable(string categoryOrder)
+        {
+            try
+            {
+                // list all Categories
+                var allCategoriesInTable = from categ in _context.Categories
+                                           select categ;
+
+                // Store the CategoryID that matches the Enum value
+                int catIndex = 0;
+
+                foreach (var enumCat in allCategoriesInTable)
+                {
+                    if (enumCat.CategoryName.ToString() == categoryOrder)
+                    {
+                        catIndex = enumCat.CategoryID;
+                    }
+                }
+
+                return catIndex;
+            }
+            catch
+            {
+                throw new NotImplementedException();
             }
         }
 
