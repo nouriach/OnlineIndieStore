@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
 using OnlineIndieStore.VMs;
+using OnlineIndieStore.Utilities;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -120,8 +121,7 @@ namespace OnlineIndieStore.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
-            ViewBag.Options = categories;
+            ViewBag.Options = UtilityMethods.GetCategoryEnumsAsList();
 
             return View();
         }

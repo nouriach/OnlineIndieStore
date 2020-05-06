@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
 using OnlineIndieStore.VMs;
+using OnlineIndieStore.Utilities;
+
 
 namespace OnlineIndieStore.Controllers
 {
@@ -28,11 +30,8 @@ namespace OnlineIndieStore.Controllers
                     .ThenInclude(c => c.Category)
                 .AsNoTracking();
 
-            List<string> categories = Enum.GetNames(typeof(CategoryName)).OrderBy(x => x).ToList();
-            ViewBag.CatOptions = categories;
-
-            List<string> selections = Enum.GetNames(typeof(Selection)).OrderBy(y => y).ToList();
-            ViewBag.SelOptions = selections;
+            ViewBag.CatOptions = UtilityMethods.GetCategoryEnumsAsList();
+            ViewBag.SelOptions = UtilityMethods.GetSelectionEnumsAsList();
 
             List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
 
