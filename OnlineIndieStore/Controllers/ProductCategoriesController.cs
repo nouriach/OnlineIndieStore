@@ -45,6 +45,10 @@ namespace OnlineIndieStore.Controllers
                 // Set new View Model Product to selected Product in the database
                 displayPvm.Product = item;
 
+                // For each entry in the ProductCategory table see where the ProductID matches the selected Product ID and store the Selection value
+                var selection = item.ProductCategories.Where(x => x.ProductID == item.ID).Select(y => y.Selection).FirstOrDefault();
+                displayPvm.Selection = selection.ToString();
+
                 // For each Categories with this database Product loop through all the assigned Categories and add them
                 foreach (var t in item.ProductCategories)
                 {
