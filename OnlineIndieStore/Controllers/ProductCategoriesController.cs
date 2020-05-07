@@ -23,7 +23,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public async Task<IActionResult> Index(string? order, string? categoryOrder)
+        public IActionResult Index(string? order, string? categoryOrder)
         {
             var appDbContext = _context.Products
                 .Include(pc => pc.ProductCategories)
@@ -60,33 +60,49 @@ namespace OnlineIndieStore.Controllers
 
             if (categoryOrder != null)
             {
-                var returnFilteredCategories = FilterCategory(categoryOrder);
+                var returnFilteredCategories = FilterProductsByCategory(categoryOrder);
                 return View(returnFilteredCategories);
             }
 
-            switch (order)
+            if (order != null)
             {
-            case "ByPriceAscending":
-                    return View(
-                        displayProds.OrderBy(x => x.Product.Price).ToList());
-            case "ByPriceDescending":
-                return View(
-                    displayProds
-                    .OrderByDescending(x => x.Product.Price)
-                    .ToList()
-                    );
-            case "ByNameDescending":
-                return View(
-                     displayProds
-                    .OrderByDescending(x => x.Product.Name)
-                    .ToList()
-                    );
-            default:
-                return View(displayProds.OrderBy(x=> x.Product.Name).ToList());
+                var returnOrderedProducts = OrderProducts(order, displayProds);
+                return View(returnOrderedProducts);
+            }
+
+            return View(displayProds.OrderBy(x => x.Product.Name).ToList());
+        }
+
+        private static List<DisplayProductViewModel> OrderProducts(string order, List<DisplayProductViewModel> displayProds)
+        {
+            try
+            {
+                switch (order)
+                {
+                    case "ByPriceAscending":
+                        return 
+                            displayProds.OrderBy(x => x.Product.Price).ToList();
+                    case "ByPriceDescending":
+                        return 
+                            displayProds
+                            .OrderByDescending(x => x.Product.Price)
+                            .ToList();
+                    case "ByNameDescending":
+                        return 
+                             displayProds
+                            .OrderByDescending(x => x.Product.Name)
+                            .ToList();
+                    default:
+                        return displayProds.OrderBy(x => x.Product.Name).ToList();
+                }
+            }
+            catch
+            {
+                throw new NotImplementedException();
             }
         }
 
-        public List<DisplayProductViewModel> FilterCategory(string categoryOrder)
+        public List<DisplayProductViewModel> FilterProductsByCategory(string categoryOrder)
         {
             var appDbContext = _context.ProductCategories
                  .Include(p => p.Product)
