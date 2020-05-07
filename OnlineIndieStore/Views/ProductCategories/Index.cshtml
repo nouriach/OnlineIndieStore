@@ -28,7 +28,7 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
         <div class="dropdown-menu">
             @foreach (var selOption in @ViewBag.SelOptions)
             {
-                <a class="dropdown-item" asp-action="Index" asp-route-order="@selOption">@selOption</a>
+                <a class="dropdown-item" asp-action="Index" asp-route-selectionOrder="@selOption">@selOption</a>
             }
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>

@@ -23,7 +23,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public IActionResult Index(string? order, string? categoryOrder)
+        public IActionResult Index(string? order, string? categoryOrder, string? selectionOrder)
         {
             var appDbContext = _context.Products
                 .Include(pc => pc.ProductCategories)
@@ -32,35 +32,8 @@ namespace OnlineIndieStore.Controllers
 
             ViewBag.CatOptions = UtilityMethods.GetCategoryEnumsAsList();
             ViewBag.SelOptions = UtilityMethods.GetSelectionEnumsAsList();
-
-            List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
-
-            foreach (var item in appDbContext)
-            {
-                // instantiate View Model
-                DisplayProductViewModel displayPvm = new DisplayProductViewModel();
-                // Create list of Categories to store incoming Categories
-                List<Category> associatedCategories = new List<Category>();
-
-                // Set new View Model Product to selected Product in the database
-                displayPvm.Product = item;
-
-                // For each entry in the ProductCategory table see where the ProductID matches the selected Product ID and store the Selection value
-                var selection = item.ProductCategories.Where(x => x.ProductID == item.ID).Select(y => y.Selection).FirstOrDefault();
-                displayPvm.Selection = selection.ToString();
-
-                // For each Categories with this database Product loop through all the assigned Categories and add them
-                foreach (var t in item.ProductCategories)
-                {
-                    associatedCategories.Add(t.Category);
-                }
-
-                // Add all the Categories to the ViewModel Category
-                displayPvm.Categories = associatedCategories;
-
-                // Add new View Model to the ViewModel list
-                displayProds.Add(displayPvm);
-            }
+            var displayAllProducts = UtilityMethods.GetAllLiveProducts(appDbContext.ToList());
+            var currentSelections = UtilityMethods.GetAllSelectionsInUse(_context);
 
             if (categoryOrder != null)
             {
@@ -70,11 +43,56 @@ namespace OnlineIndieStore.Controllers
 
             if (order != null)
             {
-                var returnOrderedProducts = OrderProducts(order, displayProds);
+                var returnOrderedProducts = OrderProducts(order, displayAllProducts);
                 return View(returnOrderedProducts);
             }
 
-            return View(displayProds.OrderBy(x => x.Product.Name).ToList());
+            if (currentSelections.Contains(selectionOrder)) 
+            { 
+                var returnFilteredSelection = FilterProductsBySelection(selectionOrder);
+                return View(returnFilteredSelection);
+            }
+
+            return View(displayAllProducts.OrderBy(x => x.Product.Name).ToList());
+        }
+
+        private List<DisplayProductViewModel> FilterProductsBySelection(string selectionOrder)
+        {
+            var appDbContext = _context.ProductCategories
+                 .Include(p => p.Product)
+                 .Include(c => c.Category)
+                .AsNoTracking();
+
+            List<DisplayProductViewModel> displaySelProds = new List<DisplayProductViewModel>();
+
+            DisplayProductViewModel dp = new DisplayProductViewModel();
+
+            try
+            {
+   
+
+                foreach (var product in appDbContext)
+                {
+                    if (product.Selection.ToString() == selectionOrder)
+                    {
+                        dp.Product = product.Product;
+
+                        dp.Categories = appDbContext
+                            .Where(x => x.ProductID == product.Product.ID)
+                            .Select(x => x.Category)
+                            .ToList();
+                    }
+                }
+                dp.Selection = selectionOrder;
+                displaySelProds.Add(dp);
+                return displaySelProds.OrderBy(x => x.Product.Name).ToList();
+            }
+
+
+            catch
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private static List<DisplayProductViewModel> OrderProducts(string order, List<DisplayProductViewModel> displayProds)
