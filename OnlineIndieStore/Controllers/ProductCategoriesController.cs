@@ -64,13 +64,10 @@ namespace OnlineIndieStore.Controllers
                 .AsNoTracking();
 
             List<DisplayProductViewModel> displaySelProds = new List<DisplayProductViewModel>();
-
             DisplayProductViewModel dp = new DisplayProductViewModel();
 
             try
             {
-   
-
                 foreach (var product in appDbContext)
                 {
                     if (product.Selection.ToString() == selectionOrder)
@@ -87,7 +84,6 @@ namespace OnlineIndieStore.Controllers
                 displaySelProds.Add(dp);
                 return displaySelProds.OrderBy(x => x.Product.Name).ToList();
             }
-
 
             catch
             {
@@ -149,10 +145,10 @@ namespace OnlineIndieStore.Controllers
                         .Where(x => x.ProductID == i.ProductID)
                         .Select(x => x.Category)
                         .ToList();
-
+                    dp.Selection = i.Selection.ToString();
                     displayProds.Add(dp);
                 }
-
+                
                 return displayProds.ToList();
             }
             catch (Exception)
