@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
+using OnlineIndieStore.VMs;
+using OnlineIndieStore.Utilities;
+
 
 namespace OnlineIndieStore.Controllers
 {
@@ -20,38 +23,146 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public async Task<IActionResult> Index(string? order)
+        public IActionResult Index(string? order, string? categoryOrder)
+        {
+            var appDbContext = _context.Products
+                .Include(pc => pc.ProductCategories)
+                    .ThenInclude(c => c.Category)
+                .AsNoTracking();
+
+            ViewBag.CatOptions = UtilityMethods.GetCategoryEnumsAsList();
+            ViewBag.SelOptions = UtilityMethods.GetSelectionEnumsAsList();
+
+            List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
+
+            foreach (var item in appDbContext)
+            {
+                // instantiate View Model
+                DisplayProductViewModel displayPvm = new DisplayProductViewModel();
+                // Create list of Categories to store incoming Categories
+                List<Category> associatedCategories = new List<Category>();
+
+                // Set new View Model Product to selected Product in the database
+                displayPvm.Product = item;
+
+                // For each Categories with this database Product loop through all the assigned Categories and add them
+                foreach (var t in item.ProductCategories)
+                {
+                    associatedCategories.Add(t.Category);
+                }
+
+                // Add all the Categories to the ViewModel Category
+                displayPvm.Categories = associatedCategories;
+
+                // Add new View Model to the ViewModel list
+                displayProds.Add(displayPvm);
+            }
+
+            if (categoryOrder != null)
+            {
+                var returnFilteredCategories = FilterProductsByCategory(categoryOrder);
+                return View(returnFilteredCategories);
+            }
+
+            if (order != null)
+            {
+                var returnOrderedProducts = OrderProducts(order, displayProds);
+                return View(returnOrderedProducts);
+            }
+
+            return View(displayProds.OrderBy(x => x.Product.Name).ToList());
+        }
+
+        private static List<DisplayProductViewModel> OrderProducts(string order, List<DisplayProductViewModel> displayProds)
+        {
+            try
+            {
+                switch (order)
+                {
+                    case "ByPriceAscending":
+                        return 
+                            displayProds.OrderBy(x => x.Product.Price).ToList();
+                    case "ByPriceDescending":
+                        return 
+                            displayProds
+                            .OrderByDescending(x => x.Product.Price)
+                            .ToList();
+                    case "ByNameDescending":
+                        return 
+                             displayProds
+                            .OrderByDescending(x => x.Product.Name)
+                            .ToList();
+                    default:
+                        return displayProds.OrderBy(x => x.Product.Name).ToList();
+                }
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public List<DisplayProductViewModel> FilterProductsByCategory(string categoryOrder)
         {
             var appDbContext = _context.ProductCategories
-                .Include(p => p.Category)
-                .Include(p => p.Product);
+                 .Include(p => p.Product)
+                 .Include(c => c.Category)
+                .AsNoTracking();
 
-            switch (order)
+            try
             {
-            case "ByPriceAscending":
-                return View(
-                    await appDbContext
-                    .OrderBy(x => x.Product.Price)
-                    .ToListAsync()
-                    );
-            case "ByPriceDescending":
-                return View(
-                    await appDbContext
-                    .OrderByDescending(x => x.Product.Price)
-                    .ToListAsync()
-                    );
-            case "ByNameDescending":
-                return View(
-                    await appDbContext
-                    .OrderByDescending(x => x.Product.Name)
-                    .ToListAsync()
-                    );
-            default:
-                return View(
-                    await appDbContext
-                    .OrderBy(x => x.Product.Name)
-                    .ToListAsync()
-                    );
+                // This is a method that takes the Enum value of Category and returns the CategoryID
+                int newCategoryIndex = FindCategoryIndexInTable(categoryOrder);
+                List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
+                List<Category> catList = new List<Category>();
+
+                var filteredList = appDbContext.Where(x => x.CategoryID == newCategoryIndex).ToList();
+
+                foreach(var i in filteredList)
+                {
+                    DisplayProductViewModel dp = new DisplayProductViewModel();
+                    dp.Product = i.Product;
+
+                    dp.Categories = appDbContext
+                        .Where(x => x.ProductID == i.ProductID)
+                        .Select(x => x.Category)
+                        .ToList();
+
+                    displayProds.Add(dp);
+                }
+
+                return displayProds.ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private int FindCategoryIndexInTable(string categoryOrder)
+        {
+            try
+            {
+                // list all Categories
+                var allCategoriesInTable = from categ in _context.Categories
+                                           select categ;
+
+                // Store the CategoryID that matches the Enum value
+                int catIndex = 0;
+
+                foreach (var enumCat in allCategoriesInTable)
+                {
+                    if (enumCat.CategoryName.ToString() == categoryOrder)
+                    {
+                        catIndex = enumCat.CategoryID;
+                    }
+                }
+
+                return catIndex;
+            }
+            catch
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -88,23 +199,18 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Product, Category, Selection")] ProductCategory productCategory)
         {
 
-            var syncProduct = _context.Products.Where(x => x.Name == productCategory.Product.Name).FirstOrDefault();
-            var syncCategory = _context.Categories.Where(x => x.CategoryName == productCategory.Category.CategoryName).FirstOrDefault();
+            var syncProduct = _context.Products
+                .Where(x => x.Name == productCategory.Product.Name)
+                .FirstOrDefault();
+            var syncCategory = _context.Categories
+                .Where(x => x.CategoryName == productCategory.Category.CategoryName)
+                .FirstOrDefault();
 
-            //foreach(var prodcat in _context.ProductCategories)
-            //{
-            //    if (prodcat.ProductID == syncProduct.ID)
-            //    {
-            //        prodcat.Category.CategoryName
-            //    }
-            //}
             ProductCategory pc = new ProductCategory
             {
                 CategoryID = syncCategory.CategoryID,
@@ -148,8 +254,6 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductCategoryID,ProductID,CategoryID,Selection")] ProductCategory productCategory)

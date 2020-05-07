@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
+using OnlineIndieStore.VMs;
+using OnlineIndieStore.Utilities;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -22,6 +24,9 @@ namespace OnlineIndieStore.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            var appDbContext =_context.Products;
+
+            // Search Box
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParam"] = sortOrder == "Price" ? "price_desc" : "Price";
@@ -62,6 +67,32 @@ namespace OnlineIndieStore.Controllers
             }
 
             int pageSize = 3;
+
+            // Filter products
+            //switch (order)
+            //{
+            //    case "ByPriceAscending":
+            //        return View(
+            //            await appDbContext
+            //            .OrderBy(x => x.Price)
+            //            .ToListAsync()
+            //            );
+            //    case "ByPriceDescending":
+            //        return View(
+            //            await appDbContext
+            //            .OrderByDescending(x => x.Price)
+            //            .ToListAsync()
+            //            );
+            //    case "ByNameDescending":
+            //        return View(
+            //            await appDbContext
+            //            .OrderByDescending(x => x.Name)
+            //            .ToListAsync()
+            //            );
+            //    default:
+            //        return View(await appDbContext.OrderBy(x => x.Name).ToListAsync());
+            //}
+
             return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
@@ -90,30 +121,62 @@ namespace OnlineIndieStore.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            ViewBag.Options = UtilityMethods.GetCategoryEnumsAsList();
+
             return View();
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageUrl")] Product product)
+        public async Task<IActionResult> Create(ProductCategoryViewModel newProdCat)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(product);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", "Products");
+                   List<ProductCategory> pc = new List<ProductCategory>();
+
+                    if (newProdCat.Product != null)
+                    {
+                        Product newProduct = newProdCat.Product;
+                        _context.Add(newProduct);
+                        _context.SaveChanges();
+                    }
+                    var syncProduct = _context.Products
+                        .Where(x => x.Name == newProdCat.Product.Name)
+                        .FirstOrDefault();
+
+                    if (newProdCat.Category.Count > 0)
+                    {
+                        foreach(var test in newProdCat.Category)
+                        {
+                            var syncCategory = _context.Categories
+                                .Where(x => x.CategoryName == test)
+                                .FirstOrDefault();
+
+                            ProductCategory newTest = new ProductCategory();
+
+                            newTest.CategoryID = syncCategory.CategoryID;
+                            newTest.ProductID = syncProduct.ID;
+                            newTest.Selection = newProdCat.ProductCategory.Selection;
+
+                            pc.Add(newTest);
+                        }
+                    }
+                    foreach (var newProdCatInstance in pc)
+                    {
+                        _context.Add(newProdCatInstance);
+                        await _context.SaveChangesAsync();
+                    }
+                    return RedirectToAction("Index", "ProductCategories");
                 }
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Unable to save changes");
             }
-            return View(product);
+            return View(newProdCat);
         }
 
         // GET: Products/Edit/5
