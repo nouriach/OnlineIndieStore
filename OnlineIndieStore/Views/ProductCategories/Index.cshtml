@@ -50,83 +50,43 @@ https://mdbootstrap.com/docs/jquery/components/cards/*@
     </li>
 </ul>
 
-<div class="card-deck">
+<div class="container">
     <div class="row justify-content-center">
         @foreach (var prod in Model)
         {
             <div class="col-md-4">
-                <div class="card mb-4 ml-2 mr-2">
+                <div class="card mb-4 ml-2 mr-2 border border-info">
+                    @*IMAGE*@
                     <div class="view overlay">
-                        <img class="card-img-top" alt="text" src="@prod.Product.ImageUrl" />
+                        <img class="card-img-top p-3" alt="text" src="@prod.Product.ImageUrl" />
                         <a href="#!">
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
-                    <div class="card-body">
-                        <h4 class="card-title">@prod.Product.Name</h4>
-                        <p class="card-text">
-                            @prod.Product.Description
-                        </p>
+                    @*CATEGORIES*@
+                    <div class="card-body d-flex justify-content-around">
+                        @foreach (var item in prod.Categories)
+                        {
+                            <a asp-action="Index" asp-route-categoryOrder="@item.CategoryName.ToString()" class="badge-pill badge-info">
+                                @Html.DisplayFor(modelItem => item.CategoryName)
+                            </a>
+                        }
                     </div>
-                    <div class="card-body">
-                        <h5>Categories</h5>
-                        <div class="d-flex justify-content-around">
-                            @foreach (var item in prod.Categories)
-                            {
-                                <p>@Html.DisplayFor(modelItem => item.CategoryName)</p>
-                            }
-                        </div>
+                    @*PRODUCT CONTENT: TITLE, PRICE & SELECTION*@
+                    <div class="card-body mb-1">
+                        <h5 class="card-title">@prod.Product.Name</h5>
+                        <p class="card-text">@prod.Product.Price </p>
+                        <a asp-action="Index" asp-route-selectionOrder="@prod.Selection">
+                            <small class="text-muted">@prod.Selection</small>
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-text">Selection:</h5>
-                        <p>@prod.Selection</p>
-                        <p class="card-text">Price: @prod.Product.Price </p>
-
-                        <div class="d-flex justify-content-around">
-                            <a href="#" class="btn btn-primary">Add to Basket</a>
-                            <a href="#" class="btn btn-success">Favourite</a>
-                        </div>
+                    @*ADD TO BASKET*@
+                    <div class="card-footer d-flex justify-content-around">
+                        <a href="#" class="btn btn-primary">Add to Basket</a>
+                        <a href="#" class="btn btn-success">Favourite</a>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
-
-        @*// Card
-    <div class="card mb-4 col-lg-3">
-
-        <div class="view overlay">
-            <img class="card-img-top" alt="text" src="@prod.Product.ImageUrl" />
-            <a href="#!">
-                <div class="mask rgba-white-slight"></div>
-            </a>
-        </div>
-
-        <div class="card-body">
-            <h4 class="card-title">@prod.Product.Name</h4>
-            <p class="card-text">
-                @prod.Product.Description
-            </p>
-        </div>
-        <div class="card-body">
-            <h5>Categories</h5>
-            @foreach (var item in prod.Categories)
-            {
-                <p>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </p>
-            }
-        </div>
-        <div class="card-body">
-            <h5 class="card-text">Selection:</h5>
-            <p>@prod.Selection</p>
-            <p class="card-text">Price: @prod.Product.Price </p>
-
-
-            <div class="d-flex justify-content-around">
-                <a href="#" class="btn btn-primary">Add to Basket</a>
-                <a href="#" class="btn btn-success">Favourite</a>
-            </div>
-        </div>
-    </div>*@

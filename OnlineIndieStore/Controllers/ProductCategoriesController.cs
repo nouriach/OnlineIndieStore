@@ -63,8 +63,8 @@ namespace OnlineIndieStore.Controllers
                  .Include(c => c.Category)
                 .AsNoTracking();
 
-            List<DisplayProductViewModel> displaySelProds = new List<DisplayProductViewModel>();
-            DisplayProductViewModel dp = new DisplayProductViewModel();
+            List<DisplayProductViewModel> getAllMatchingProducts = new List<DisplayProductViewModel>();
+            List<DisplayProductViewModel> getUniqueMatchingProducts = new List<DisplayProductViewModel>();
 
             try
             {
@@ -72,17 +72,26 @@ namespace OnlineIndieStore.Controllers
                 {
                     if (product.Selection.ToString() == selectionOrder)
                     {
+                        DisplayProductViewModel dp = new DisplayProductViewModel();
                         dp.Product = product.Product;
 
                         dp.Categories = appDbContext
                             .Where(x => x.ProductID == product.Product.ID)
                             .Select(x => x.Category)
                             .ToList();
+                        dp.Selection = selectionOrder;
+                        getAllMatchingProducts.Add(dp);
                     }
                 }
-                dp.Selection = selectionOrder;
-                displaySelProds.Add(dp);
-                return displaySelProds.OrderBy(x => x.Product.Name).ToList();
+
+                var distinctProducts = getAllMatchingProducts.GroupBy(x => x.Product.ID).Select(y => y.First());
+
+                foreach (var product in distinctProducts)
+                {
+                    getUniqueMatchingProducts.Add(product);
+                }
+
+                return getUniqueMatchingProducts.OrderBy(x => x.Product.Name).ToList();
             }
 
             catch
