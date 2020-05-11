@@ -129,7 +129,6 @@ namespace OnlineIndieStore.Controllers
 
             try
             {
-                // This is a method that takes the Enum value of Category and returns the CategoryID
                 int newCategoryIndex = FindCategoryIndexInTable(categoryOrder);
                 List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
                 List<Category> catList = new List<Category>();
@@ -161,11 +160,8 @@ namespace OnlineIndieStore.Controllers
         {
             try
             {
-                // list all Categories
                 var allCategoriesInTable = from categ in _context.Categories
                                            select categ;
-
-                // Store the CategoryID that matches the Enum value
                 int catIndex = 0;
 
                 foreach (var enumCat in allCategoriesInTable)
