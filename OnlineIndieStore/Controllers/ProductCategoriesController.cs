@@ -74,7 +74,6 @@ namespace OnlineIndieStore.Controllers
                     {
                         DisplayProductViewModel dp = new DisplayProductViewModel();
                         dp.Product = product.Product;
-
                         dp.Categories = appDbContext
                             .Where(x => x.ProductID == product.Product.ID)
                             .Select(x => x.Category)
@@ -190,23 +189,33 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? productName)
         {
-            if (id == null)
+            if (productName == null)
             {
                 return NotFound();
             }
+
 
             var productCategory = await _context.ProductCategories
                 .Include(p => p.Category)
                 .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.ProductCategoryID == id);
-            if (productCategory == null)
+                .FirstOrDefaultAsync(m => m.Product.Name == productName);
+
+            DisplayProductViewModel productDetails = new DisplayProductViewModel
+            {
+                Product = productCategory.Product,
+                Categories = _context.ProductCategories.Where(x => x.ProductID == productCategory.ProductID).Select(y => y.Category).ToList(),
+                Selection = productCategory.Selection.ToString()
+            };
+
+
+            if (productDetails == null)
             {
                 return NotFound();
             }
 
-            return View(productCategory);
+            return View(productDetails);
         }
 
         // GET: ProductCategories/Create
