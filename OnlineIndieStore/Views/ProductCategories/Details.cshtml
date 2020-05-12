@@ -1,4 +1,4 @@
-﻿@model OnlineIndieStore.Models.ProductCategory
+﻿@model OnlineIndieStore.VMs.DisplayProductViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,30 +7,30 @@
 <h1>Details</h1>
 
 <div>
-    <h4>ProductCategory</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Selection)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Selection)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.ID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryID)
-        </dd>
-    </dl>
+    <div class="d-flex">
+        <div>
+            <img src="@Model.Product.ImageUrl" />
+        </div>
+        <div>
+            <h5>@Model.Product.Name</h5>
+            <p>@Model.Product.Description</p>
+            <p>@Model.Product.Price</p>
+        </div>
+    </div>
+    <div>
+        <h4>Categories</h4>
+        @foreach(var cat in Model.Categories)
+        {
+            <p>@cat.CategoryName</p>
+        }
+    </div>
+    <div>
+        <h4>Selection</h4>
+        <p>@Model.Selection</p>
+    </div>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ProductCategoryID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Product.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

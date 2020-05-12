@@ -63,31 +63,35 @@ namespace OnlineIndieStore.Controllers
                  .Include(c => c.Category)
                 .AsNoTracking();
 
-            List<DisplayProductViewModel> displaySelProds = new List<DisplayProductViewModel>();
-
-            DisplayProductViewModel dp = new DisplayProductViewModel();
+            List<DisplayProductViewModel> getAllMatchingProducts = new List<DisplayProductViewModel>();
+            List<DisplayProductViewModel> getUniqueMatchingProducts = new List<DisplayProductViewModel>();
 
             try
             {
-   
-
                 foreach (var product in appDbContext)
                 {
                     if (product.Selection.ToString() == selectionOrder)
                     {
+                        DisplayProductViewModel dp = new DisplayProductViewModel();
                         dp.Product = product.Product;
-
                         dp.Categories = appDbContext
                             .Where(x => x.ProductID == product.Product.ID)
                             .Select(x => x.Category)
                             .ToList();
+                        dp.Selection = selectionOrder;
+                        getAllMatchingProducts.Add(dp);
                     }
                 }
-                dp.Selection = selectionOrder;
-                displaySelProds.Add(dp);
-                return displaySelProds.OrderBy(x => x.Product.Name).ToList();
-            }
 
+                var distinctProducts = getAllMatchingProducts.GroupBy(x => x.Product.ID).Select(y => y.First());
+
+                foreach (var product in distinctProducts)
+                {
+                    getUniqueMatchingProducts.Add(product);
+                }
+
+                return getUniqueMatchingProducts.OrderBy(x => x.Product.Name).ToList();
+            }
 
             catch
             {
@@ -133,7 +137,6 @@ namespace OnlineIndieStore.Controllers
 
             try
             {
-                // This is a method that takes the Enum value of Category and returns the CategoryID
                 int newCategoryIndex = FindCategoryIndexInTable(categoryOrder);
                 List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
                 List<Category> catList = new List<Category>();
@@ -149,10 +152,10 @@ namespace OnlineIndieStore.Controllers
                         .Where(x => x.ProductID == i.ProductID)
                         .Select(x => x.Category)
                         .ToList();
-
+                    dp.Selection = i.Selection.ToString();
                     displayProds.Add(dp);
                 }
-
+                
                 return displayProds.ToList();
             }
             catch (Exception)
@@ -165,11 +168,8 @@ namespace OnlineIndieStore.Controllers
         {
             try
             {
-                // list all Categories
                 var allCategoriesInTable = from categ in _context.Categories
                                            select categ;
-
-                // Store the CategoryID that matches the Enum value
                 int catIndex = 0;
 
                 foreach (var enumCat in allCategoriesInTable)
@@ -189,23 +189,33 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? productName)
         {
-            if (id == null)
+            if (productName == null)
             {
                 return NotFound();
             }
+
 
             var productCategory = await _context.ProductCategories
                 .Include(p => p.Category)
                 .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.ProductCategoryID == id);
-            if (productCategory == null)
+                .FirstOrDefaultAsync(m => m.Product.Name == productName);
+
+            DisplayProductViewModel productDetails = new DisplayProductViewModel
+            {
+                Product = productCategory.Product,
+                Categories = _context.ProductCategories.Where(x => x.ProductID == productCategory.ProductID).Select(y => y.Category).ToList(),
+                Selection = productCategory.Selection.ToString()
+            };
+
+
+            if (productDetails == null)
             {
                 return NotFound();
             }
 
-            return View(productCategory);
+            return View(productDetails);
         }
 
         // GET: ProductCategories/Create
