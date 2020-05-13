@@ -10,7 +10,7 @@
 <hr />
 
 <div class="row">
-    <form asp-controller="Products" asp-action="Create" method="post">
+    <form asp-controller="Products" asp-action="Create" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @*PRODUCT*@
         <div class="form-group">
@@ -28,14 +28,24 @@
             <input asp-for="@Model.Product.Description" class="form-control" />
             <span asp-validation-for="@Model.Product.Description" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        @*<div class="form-group">
             <label asp-for="@Model.Product.ImageUrl" class="control-label"></label>
             <input asp-for="@Model.Product.ImageUrl" class="form-control" />
             <span asp-validation-for="@Model.Product.ImageUrl" class="text-danger"></span>
+        </div>*@
+        <div class="form-group">
+            <label asp-for="@Model.Image.Ttile" class="control-label"></label>
+            <input asp-for="@Model.Image.Ttile" class="form-control" />
+            <span asp-validation-for="@Model.Image.Ttile" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Image.ImageFile" class="control-label"></label>
+            <input asp-for="@Model.Image.ImageFile"  accept="image/*"  />
+            <span asp-validation-for="@Model.Image.ImageFile" class="text-danger"></span>
         </div>
         @*CATEGORY*@
-    <div class="form-group">
-        <label asp-for="@Model.Category"></label>
+        <div class="form-group">
+            <label asp-for="@Model.Category"></label>
             <select class="form-control" asp-for="@Model.Category">
                 @foreach (var selectCategory in @ViewBag.Options)
                 {

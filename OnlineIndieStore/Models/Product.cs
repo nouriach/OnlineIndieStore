@@ -20,5 +20,6 @@ namespace OnlineIndieStore.Models
 
         // Navigational Properties
         public ICollection<ProductCategory> ProductCategories { get; set; }
+        public Image Image { get; set; }
     }
 }

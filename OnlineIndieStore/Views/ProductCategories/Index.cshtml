@@ -57,11 +57,12 @@
             <div class="col-md-4">
                 <div class="card mb-4 ml-2 mr-2 border border-info">
                     @*IMAGE*@
-                    <div class="view overlay">
-                        <img class="card-img-top p-3" alt="text" src="@prod.Product.ImageUrl" />
-                        <a href="#!">
-                            <div class="mask rgba-white-slight"></div>
-                        </a>
+                    <div>
+                        <img src="@("~/image/" + prod.Image.ImageName)" asp-append-version="true" />
+                    </div>
+                    <div>
+                        <p>Test below</p>
+                        <p>@prod.Image.ImageName</p>
                     </div>
                     @*CATEGORIES*@
                     <div class="card-body d-flex justify-content-around">

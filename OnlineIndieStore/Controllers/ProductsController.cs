@@ -9,16 +9,20 @@ using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
 using OnlineIndieStore.VMs;
 using OnlineIndieStore.Utilities;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace OnlineIndieStore.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(AppDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Products
@@ -135,16 +139,43 @@ namespace OnlineIndieStore.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                   List<ProductCategory> pc = new List<ProductCategory>();
+                    List<ProductCategory> pc = new List<ProductCategory>();
+                    Image newImg = new Image();
+                    Product newProduct = new Product();
 
                     if (newProdCat.Product != null)
                     {
-                        Product newProduct = newProdCat.Product;
+                        newProduct = newProdCat.Product;
                         _context.Add(newProduct);
                         _context.SaveChanges();
+
                     }
                     var syncProduct = _context.Products
                         .Where(x => x.Name == newProdCat.Product.Name)
+                        .FirstOrDefault();
+
+                    if (newProdCat.Image != null)
+                    {
+                        // Get and save Image to wwwroot/image
+                        string wwwRootPath = _hostEnvironment.WebRootPath;
+                        string fileName = Path.GetFileNameWithoutExtension(newProdCat.Image.ImageFile.FileName);
+                        string extension = Path.GetExtension(newProdCat.Image.ImageFile.FileName);
+                        //newProdCat.Image.ImageName = fileName+DateTime.Now.ToString("yymmssfff") + extension;
+                        newProdCat.Image.ImageName = fileName + extension;
+
+                        string path = Path.Combine(wwwRootPath + "/Image/", fileName + extension);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await newProdCat.Image.ImageFile.CopyToAsync(fileStream);
+                        }
+
+                        newImg = newProdCat.Image;
+                        newImg.ProductID = syncProduct.ID;
+                        _context.Add(newImg);
+                        _context.SaveChanges();
+                    }
+                    var syncImage = _context.Images
+                        .Where(x => x.ImageName == newProdCat.Image.ImageName)
                         .FirstOrDefault();
 
                     if (newProdCat.Category.Count > 0)
@@ -159,13 +190,16 @@ namespace OnlineIndieStore.Controllers
 
                             newTest.CategoryID = syncCategory.CategoryID;
                             newTest.ProductID = syncProduct.ID;
+                            // newTest.Product.Image = syncImage;
                             newTest.Selection = newProdCat.ProductCategory.Selection;
 
                             pc.Add(newTest);
                         }
                     }
+                    
                     foreach (var newProdCatInstance in pc)
                     {
+                        // no presence of Image in here
                         _context.Add(newProdCatInstance);
                         await _context.SaveChangesAsync();
                     }

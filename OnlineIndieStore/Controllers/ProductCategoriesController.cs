@@ -32,7 +32,7 @@ namespace OnlineIndieStore.Controllers
 
             ViewBag.CatOptions = UtilityMethods.GetCategoryEnumsAsList();
             ViewBag.SelOptions = UtilityMethods.GetSelectionEnumsAsList();
-            var displayAllProducts = UtilityMethods.GetAllLiveProducts(appDbContext.ToList());
+            var displayAllProducts = UtilityMethods.GetAllLiveProducts(_context);
             var currentSelections = UtilityMethods.GetAllSelectionsInUse(_context);
 
             if (categoryOrder != null)

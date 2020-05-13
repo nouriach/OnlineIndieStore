@@ -11,6 +11,7 @@ namespace OnlineIndieStore.VMs
         public Product Product { get; set; }
         public List<CategoryName> Category { get; set; }
         public ProductCategory ProductCategory { get; set; }
+        public Image Image { get; set; }
 
     }
 }

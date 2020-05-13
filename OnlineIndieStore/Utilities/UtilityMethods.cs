@@ -35,28 +35,41 @@ namespace OnlineIndieStore.Utilities
             return allExisitingSelections;
         }
 
-       public static List<DisplayProductViewModel> GetAllLiveProducts(List<Product> db)
+        // Does the latest Image appear in this argumenmt?
+       public static List<DisplayProductViewModel> GetAllLiveProducts(AppDbContext db)
         {
             List<DisplayProductViewModel> displayProds = new List<DisplayProductViewModel>();
 
-            foreach (var item in db)
+            var allProducts = db.Products;
+
+            foreach (var item in allProducts)
             {
                 // instantiate View Model
                 DisplayProductViewModel displayPvm = new DisplayProductViewModel();
+
                 // Create list of Categories to store incoming Categories
                 List<Category> associatedCategories = new List<Category>();
 
                 // Set new View Model Product to selected Product in the database
                 displayPvm.Product = item;
 
+                // Set new View Model Image to selected Product's related Image in the database
+                var img = db.Images.Where(x => x.ProductID == item.ID).FirstOrDefault();
+                displayPvm.Image = img;
+
                 // For each entry in the ProductCategory table see where the ProductID matches the selected Product ID and store the Selection value
-                var selection = item.ProductCategories.Where(x => x.ProductID == item.ID).Select(y => y.Selection).FirstOrDefault();
+                var selection = db.ProductCategories.Where(x => x.ProductID == item.ID).Select(y => y.Selection).FirstOrDefault();
                 displayPvm.Selection = selection.ToString();
 
+
                 // For each Categories with this database Product loop through all the assigned Categories and add them
-                foreach (var t in item.ProductCategories)
+                foreach (var t in db.ProductCategories)
                 {
-                    associatedCategories.Add(t.Category);
+                    if (t.ProductID == item.ID)
+                    {
+                        var cat = db.Categories.Where(x => x.CategoryID == t.CategoryID).FirstOrDefault();
+                        associatedCategories.Add(cat);
+                    }
                 }
 
                 // Add all the Categories to the ViewModel Category
