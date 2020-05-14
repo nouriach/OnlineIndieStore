@@ -110,11 +110,28 @@ namespace OnlineIndieStore.Controllers
                 return NotFound();
             }
 
+            DisplayProductViewModel dPvm = new DisplayProductViewModel();
+
             var product = await _context.Products
                 .Include(pc => pc.ProductCategories)
                     .ThenInclude(c => c.Category)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            dPvm.Product = product;
+            dPvm.Categories = product.ProductCategories
+                .Where(x => x.ProductID == product.ID)
+                .Select(c => c.Category)
+                .ToList();
+            dPvm.Selection = product.ProductCategories
+                .Where(x => x.ProductID == product.ID)
+                .Select(c => c.Selection.ToString())
+                .FirstOrDefault();
+            dPvm.Image = product.ProductCategories
+                .Where(i => i.Product.Image.ProductID == product.ID)
+                .Select(img => img.Product.Image)
+                .FirstOrDefault();
+                
 
             if (product == null)
             {

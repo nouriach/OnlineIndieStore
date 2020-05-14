@@ -206,16 +206,20 @@ namespace OnlineIndieStore.Controllers
             }
 
 
-            var productCategory = await _context.ProductCategories
+            var findMatchingProduct = await _context.ProductCategories
                 .Include(p => p.Category)
                 .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.Product.Name == productName);
 
             DisplayProductViewModel productDetails = new DisplayProductViewModel
             {
-                Product = productCategory.Product,
-                Categories = _context.ProductCategories.Where(x => x.ProductID == productCategory.ProductID).Select(y => y.Category).ToList(),
-                Selection = productCategory.Selection.ToString()
+                Product = findMatchingProduct.Product,
+                Categories = _context.ProductCategories.Where(x => x.ProductID == findMatchingProduct.ProductID).Select(y => y.Category).ToList(),
+                Selection = findMatchingProduct.Selection.ToString(),
+                Image = _context.ProductCategories
+                .Where(i => i.Product.Image.ProductID == findMatchingProduct.ProductID)
+                .Select(img => img.Product.Image)
+                .FirstOrDefault()
             };
 
 
