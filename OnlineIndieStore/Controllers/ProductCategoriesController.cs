@@ -78,6 +78,11 @@ namespace OnlineIndieStore.Controllers
                             .Where(x => x.ProductID == product.Product.ID)
                             .Select(x => x.Category)
                             .ToList();
+                        dp.Image = appDbContext
+                            .Where(x => x.Product.Image.ProductID == product.Product.ID)
+                            .Select(y => y.Product.Image)
+                            .FirstOrDefault();
+
                         dp.Selection = selectionOrder;
                         getAllMatchingProducts.Add(dp);
                     }
@@ -153,6 +158,10 @@ namespace OnlineIndieStore.Controllers
                         .Select(x => x.Category)
                         .ToList();
                     dp.Selection = i.Selection.ToString();
+                    dp.Image = appDbContext
+                        .Where(x => x.Product.Image.ProductID == i.ProductID)
+                        .Select(x => x.Product.Image).FirstOrDefault();
+
                     displayProds.Add(dp);
                 }
                 

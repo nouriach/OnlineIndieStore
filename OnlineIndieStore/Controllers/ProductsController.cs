@@ -11,6 +11,8 @@ using OnlineIndieStore.VMs;
 using OnlineIndieStore.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -140,7 +142,7 @@ namespace OnlineIndieStore.Controllers
                 if (ModelState.IsValid)
                 {
                     List<ProductCategory> pc = new List<ProductCategory>();
-                    Image newImg = new Image();
+                    Models.Image newImg = new Models.Image();
                     Product newProduct = new Product();
 
                     if (newProdCat.Product != null)
@@ -162,8 +164,8 @@ namespace OnlineIndieStore.Controllers
                         string extension = Path.GetExtension(newProdCat.Image.ImageFile.FileName);
                         //newProdCat.Image.ImageName = fileName+DateTime.Now.ToString("yymmssfff") + extension;
                         newProdCat.Image.ImageName = fileName + extension;
-
                         string path = Path.Combine(wwwRootPath + "/Image/", fileName + extension);
+
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
                             await newProdCat.Image.ImageFile.CopyToAsync(fileStream);
@@ -171,6 +173,7 @@ namespace OnlineIndieStore.Controllers
 
                         newImg = newProdCat.Image;
                         newImg.ProductID = syncProduct.ID;
+
                         _context.Add(newImg);
                         _context.SaveChanges();
                     }

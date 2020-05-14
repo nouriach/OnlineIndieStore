@@ -4,7 +4,9 @@ using OnlineIndieStore.VMs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing ;
 using System.Threading.Tasks;
+using ImageResizer;
 
 namespace OnlineIndieStore.Utilities
 {
@@ -55,6 +57,7 @@ namespace OnlineIndieStore.Utilities
 
                 // Set new View Model Image to selected Product's related Image in the database
                 var img = db.Images.Where(x => x.ProductID == item.ID).FirstOrDefault();
+
                 displayPvm.Image = img;
 
                 // For each entry in the ProductCategory table see where the ProductID matches the selected Product ID and store the Selection value
