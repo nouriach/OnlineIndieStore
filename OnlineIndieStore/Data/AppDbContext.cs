@@ -18,6 +18,10 @@ namespace OnlineIndieStore.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<LoginModel> LoginModels { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +29,9 @@ namespace OnlineIndieStore.Data
             modelBuilder.Entity<ProductCategory>().ToTable("ProductCategory");
             modelBuilder.Entity<Product>().ToTable("Product");
             modelBuilder.Entity<Image>().ToTable("Image");
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<LoginModel>().ToTable("LoginModel");
+
 
         }
     }
