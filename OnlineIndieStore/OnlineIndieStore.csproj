@@ -7,8 +7,6 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200423123606_CategoryEnum.cs" />
     <Compile Remove="Migrations\20200423123606_CategoryEnum.Designer.cs" />
-    <Compile Remove="Migrations\20200514153011_AuthenticationUpdate.cs" />
-    <Compile Remove="Migrations\20200514153011_AuthenticationUpdate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
