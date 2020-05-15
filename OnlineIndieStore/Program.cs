@@ -2,18 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OnlineIndieStore.Data;
+using OnlineIndieStore.Models;
 
 namespace OnlineIndieStore
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
@@ -23,6 +25,12 @@ namespace OnlineIndieStore
                 {
                     var context = services.GetRequiredService<AppDbContext>();
                     DbInitializer.Initialize(context);
+
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                    // send to DbInitiliazer 
+                    await DbInitializer.InitializeUsers(userManager, roleManager);
                 }
                 catch (Exception ex)
                 {
