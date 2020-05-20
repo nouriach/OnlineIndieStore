@@ -11,5 +11,6 @@ namespace OnlineIndieStore.Models
     {
         [Required]
         public string FirstName { get; set; }
+
     }
 }
