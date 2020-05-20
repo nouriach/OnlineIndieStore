@@ -31,6 +31,7 @@ namespace OnlineIndieStore.Controllers
             return View();
         }
 
+        /******** REGISTER NEW USER ********/
 
         [HttpGet]
         public IActionResult Register()
@@ -54,6 +55,7 @@ namespace OnlineIndieStore.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, true);
+                    return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var errors in result.Errors)
@@ -61,8 +63,42 @@ namespace OnlineIndieStore.Controllers
                     ModelState.AddModelError("", errors.Description);
                 }
             }
-
             return View();
         }
+
+        /******** LOGIN AS USER ********/
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _user.FindByEmailAsync(model.Email);
+                var result = await _signInManager.PasswordSignInAsync(user.Result.UserName, model.Password, true, false);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError("", "Invalid Login");
+            }
+            return View();
+        }
+
+        /******** LOG OUT USER ********/
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
