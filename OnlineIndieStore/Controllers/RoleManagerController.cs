@@ -126,11 +126,61 @@ namespace OnlineIndieStore.Controllers
 
         /***** DELETE ROLES *****/
 
-        //public Task<IActionResult> DeleteRoles(int id)
-        //{
+        [HttpGet]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var matchingRole = await this.rolesManager.FindByIdAsync(id);
+            if (matchingRole == null)
+            {
+                ViewBag.ErrorMessages = $"Role of given id {id} is not found.";
+                return View("NotFound");
+            }
+            else
+            {
+                var model = new EditRoleViewModel()
+                {
+                    RoleName = matchingRole.Name,
+                    Id = (matchingRole.Id),
 
-        //    return View();
-        //}
+                };
+                foreach (var users in _user.Users)
+                {
+                    if (await _user.IsInRoleAsync(users, matchingRole.Name))
+                    {
+                        model.Users.Add(users.UserName);
+                    }
+
+                }
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(EditRoleViewModel newModel)
+        {
+            var matchingRole = await this.rolesManager.FindByIdAsync(newModel.Id);
+            if (matchingRole == null)
+            {
+                ViewBag.ErrorMessages = $"Role of given id {newModel.Id} is not found.";
+                return View("NotFound");
+            }
+
+            else
+            {
+                matchingRole.Name = newModel.RoleName;
+                var res = await this.rolesManager.DeleteAsync(matchingRole);
+                if (res.Succeeded)
+                {
+                    return RedirectToAction("Index", "RoleManager");
+                }
+                foreach (var erros in res.Errors)
+                {
+                    ModelState.AddModelError("", erros.Description);
+                }
+            }
+
+            return View(newModel);
+        }
     }
 }
  
