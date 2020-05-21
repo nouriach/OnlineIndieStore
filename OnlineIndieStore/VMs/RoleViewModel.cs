@@ -13,5 +13,7 @@ namespace OnlineIndieStore.VMs
         [Required]
         public string RoleName { get; set; }
         public IQueryable<IdentityRole> IdentityRole { get; set; }
+        public List<AppUser> AppUser { get; set; }
+
     }
 }

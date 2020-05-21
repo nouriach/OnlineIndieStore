@@ -22,8 +22,18 @@ namespace OnlineIndieStore.Controllers
         public IActionResult Index(RoleViewModel rvm)
         {
             var list = this.rolesManager.Roles;
-            RoleViewModel listRolesViewModel = new RoleViewModel();
-            listRolesViewModel.IdentityRole  = list;
+            List<AppUser> userList = new List<AppUser>();
+
+            foreach (var users in _user.Users)
+            {
+                userList.Add(users);
+            }
+
+            RoleViewModel listRolesViewModel = new RoleViewModel()
+            {
+                IdentityRole = list,
+                AppUser = userList.OrderBy(x => x.FirstName).ToList()
+            };
 
             return View(listRolesViewModel);
         }
@@ -178,8 +188,51 @@ namespace OnlineIndieStore.Controllers
                     ModelState.AddModelError("", erros.Description);
                 }
             }
-
             return View(newModel);
+        }
+
+        /****** Assign Role to a User *******/
+
+        [HttpGet]
+        public async Task<IActionResult> EditUsersInRoles(string id)
+        {
+            var matchingUser = await _user.FindByIdAsync(id);
+            if (matchingUser == null)
+            {
+                ViewBag.ErrorMessages = $"Role of given id {id} is not found.";
+                return View("NotFound");
+            }
+            else
+            {
+                List<IdentityRole> userIdentityRoles = new List<IdentityRole>();
+                List<IdentityRole> availableIdentityRoles = new List<IdentityRole>();
+
+                foreach (var role in this.rolesManager.Roles)
+                {
+                    availableIdentityRoles.Add(role);
+
+                    if (await _user.IsInRoleAsync(matchingUser, role.ToString()))
+                    {
+                        userIdentityRoles.Add(role);
+                    }
+                }
+                EditsUsersInRolesViewModel model = new EditsUsersInRolesViewModel()
+                {
+                    Id = (matchingUser.Id),
+                    AppUser = matchingUser,
+                    IdentityRoles = userIdentityRoles
+                };
+
+                ViewBag.AvailableRoles = availableIdentityRoles;
+
+                return View(model);
+            }
+
+            // Create a new view model for displaying it all
+            // add the user to the view model
+            // loop through user to see if any roles have historically been assigned
+
+            return View();
         }
     }
 }

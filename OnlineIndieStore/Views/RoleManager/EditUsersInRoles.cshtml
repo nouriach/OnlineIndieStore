@@ -1,0 +1,58 @@
+﻿@model OnlineIndieStore.VMs.EditsUsersInRolesViewModel;
+
+<div>
+    <h3>Update User Access</h3>
+</div>
+<div class="card mb-3">
+    <div class="card-header">
+        @Model.AppUser.Id
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">
+            @Model.AppUser.FirstName
+        </h4>
+        <div class="d-flex">
+            <p class="mr-2">
+                @Model.AppUser.UserName
+            </p>
+            <p class="mr-2">
+                @Model.AppUser.Email
+            </p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-around">
+        <form>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    View Available Roles
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        @foreach (var roleOption in @ViewBag.AvailableRoles)
+                        {
+                            <a class="dropdown-item">@roleOption</a>
+                        }
+                </div>
+            </div>
+        </form>
+
+        <div>
+            <h5>Current Roles</h5>
+            @{
+                if (Model.IdentityRoles.Count() > 0)
+                {
+                    foreach (var userRole in Model.IdentityRoles)
+                    {
+                        <p>@userRole</p>
+                    }
+                }
+                else
+                {
+                    <p>Currently no roles.</p>
+                }
+            }
+        </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-info" asp-action="Index" asp-controller="RoleManager">Back to Manager Users</a>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿@model OnlineIndieStore.VMs.RoleViewModel;
+
+<h1>All Users</h1>
+
+@if (Model.IdentityRole.Count() > 0)
+{
+    foreach (var user in Model.AppUser)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                @user.Id
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    @user.FirstName
+                </h4>
+                <div class="d-flex">
+                    <p class="mr-2">
+                        @user.UserName
+                    </p>
+                    <p class="mr-2">
+                        @user.Email
+                    </p>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-info" asp-action="EditUsersInRoles" asp-controller="RoleManager" asp-route-id="@user.Id">Update User Access</a>
+            </div>
+
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Roles Found In Table
+        </div>
+
+        <div class="card-body">
+            <a class="btn btn-info" asp-action="CreateRoles" asp-controller="RoleManager">Create Role</a>
+        </div>
+    </div>
+}
