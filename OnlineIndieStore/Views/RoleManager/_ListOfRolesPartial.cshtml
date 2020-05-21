@@ -1,0 +1,41 @@
+﻿@model OnlineIndieStore.VMs.RoleViewModel;
+@{
+    ViewData["Title"] = "ListOfRoles";
+}
+
+<h1>All Roles</h1>
+
+@if (Model.IdentityRole.Count() > 0)
+{
+    foreach (var role in Model.IdentityRole)
+    {
+        <div class="card">
+            <div class="card-header">
+                @role.Id
+            </div>
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    @role.Name
+                </h4>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-info" asp-action="EditRole" asp-controller="RoleManager" asp-route-id="@role.Id">Edit</a>
+                <a class="btn btn-danger" asp-action="DeleteRole" asp-controller="RoleManager">Delete</a>
+            </div>
+
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Roles Found In Table
+        </div>
+
+        <div class="card-body">
+            <a class="btn btn-info" asp-action="CreateRoles" asp-controller="RoleManager">Create Role</a>
+        </div>
+    </div>
+}
