@@ -11,6 +11,8 @@ namespace OnlineIndieStore.VMs
     {
         public string Id { get; set; }
         public AppUser AppUser { get; set; }
-        public List<IdentityRole> IdentityRoles { get; set; }
+        public IdentityRole IdentityRoles { get; set; }
+        public bool IsChecked { get; set; }
+
     }
 }

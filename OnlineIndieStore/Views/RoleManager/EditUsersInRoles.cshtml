@@ -1,58 +1,111 @@
-﻿@model OnlineIndieStore.VMs.EditsUsersInRolesViewModel;
+﻿@model List<OnlineIndieStore.VMs.EditsUsersInRolesViewModel>;
+
+@{
+    var User = @ViewBag.User;
+}
 
 <div>
     <h3>Update User Access</h3>
 </div>
-<div class="card mb-3">
-    <div class="card-header">
-        @Model.AppUser.Id
-    </div>
-    <div class="card-body">
-        <h4 class="card-title">
-            @Model.AppUser.FirstName
-        </h4>
-        <div class="d-flex">
-            <p class="mr-2">
-                @Model.AppUser.UserName
-            </p>
-            <p class="mr-2">
-                @Model.AppUser.Email
-            </p>
+<div class="d-flex justify-content-around">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Selected User</h2>
+        </div>
+        <div>
+            <h3>@User</h3>
+            @*<p>
+                    @Model.AppUser.Id
+                </p>
+                <h4 class="card-title">
+                    @Model.AppUser.FirstName
+                </h4>
+                <div class="d-flex card-body">
+                    <p class="mr-2">
+                        @Model.AppUser.UserName
+                    </p>
+                    <p class="mr-2">
+                        @Model.AppUser.Email
+                    </p>
+                </div>*@
         </div>
     </div>
-    <div class="d-flex justify-content-around">
-        <form>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    View Available Roles
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        @foreach (var roleOption in @ViewBag.AvailableRoles)
-                        {
-                            <a class="dropdown-item">@roleOption</a>
-                        }
-                </div>
-            </div>
-        </form>
-
-        <div>
-            <h5>Current Roles</h5>
-            @{
-                if (Model.IdentityRoles.Count() > 0)
+    <div class="card">
+        <div class="card-header">
+            <h2>Available Roles</h2>
+        </div>
+        <div class="card-body">
+            @foreach (var t in Model)
+            {
+                if (t.IdentityRoles != null)
                 {
-                    foreach (var userRole in Model.IdentityRoles)
-                    {
-                        <p>@userRole</p>
-                    }
+                    <h5>@t.IdentityRoles.Name</h5>
                 }
                 else
                 {
-                    <p>Currently no roles.</p>
+                    <p class="text-danger">No matching roles found with this user</p>
                 }
             }
         </div>
     </div>
-    <div class="card-footer">
-        <a class="btn btn-info" asp-action="Index" asp-controller="RoleManager">Back to Manager Users</a>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Assigned User Roles </h2>
+        </div>
+        <div class="card-body">
+            @foreach (var t in Model)
+            {
+                if ((t.IdentityRoles != null) && (t.IsChecked == true))
+                {
+                    <h5>@t.IdentityRoles.Name</h5>
+                }
+                else
+                {
+                    <p class="text-danger">No matching roles found with this user</p>
+                }
+            }
+        </div>
     </div>
 </div>
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h3>Add and Remove Roles For @User</h3>
+        </div>
+        <div class="card-body">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="form-check">
+                    <input type="hidden" asp-for="@Model[i].IdentityRoles.Id" />
+                    <input type="hidden" asp-for="@Model[i].IdentityRoles.Name" />
+                    <input asp-for="@Model[i].IsChecked" class="form-check-input" />
+                    <label>@Model[i].IdentityRoles.Name </label>
+                </div>
+            }
+        </div>
+
+        <div class="card-footer">
+            <input type="submit" value="Update" class="btn btn-primary" />
+            <a type="submit" class="btn btn-primary" asp-action="EditUsersInRoles" asp-controller="RoleManager">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@*/*****
+
+    <h5>Available Roles</h5>
+    @foreach (var roleOption in @ViewBag.AvailableRoles)
+    {
+        <div class="checkbox">
+            <label name="IdentityRoles">
+                <input value="@roleOption" type="checkbox" asp-for="@Model.IsChecked" />
+                @roleOption
+            </label>
+        </div>
+    }
+    <div class="form-group">
+        <input type="submit" value="Update" class="btn btn-primary" />
+    </div>
+
+    *****/*@
