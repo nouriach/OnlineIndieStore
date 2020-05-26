@@ -59,7 +59,7 @@ namespace OnlineIndieStore.Controllers
                     
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ListOfRoles", "Rolemanag");
+                    return RedirectToAction("Index", "RoleManager");
                 }
                 foreach (var identityErrorLE in result.Errors)
                 {

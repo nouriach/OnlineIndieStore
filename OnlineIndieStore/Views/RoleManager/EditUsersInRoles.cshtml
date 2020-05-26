@@ -9,73 +9,82 @@
     };
 }
 
-<div>
+<div class="p-3 text-center">
     <h3>Update User Access</h3>
 </div>
 <div class="d-flex justify-content-around">
-    <div class="card">
-        <div class="card-header">
-            <h2 class="card-title">Selected User</h2>
-        </div>
-        <div>
-            <h4 class="card-title">
-                @user.FirstName
-            </h4>
-            <div class="d-flex card-body">
-                <p class="mr-2">
-                    @user.UserName
-                </p>
-                <p class="mr-2">
-                    @user.Email
-                </p>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>User Info</h4>
+            </div>
+            <div class="p-4">
+                <div>
+                    <h5 class="card-title">User Details</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                </div>
+                <div>
+                    <p class="card-text">Name: 
+                        <span class="card-subtitle mb-2 text-muted">@user.FirstName</span>
+                    </p>
+                    
+                    <p class="card-text">Username: 
+                        <span class="card-subtitle mb-2 text-muted">@user.UserName</span>
+                    </p>
+                    <p class="card-text">Email: 
+                        <span class="card-subtitle mb-2 text-muted">@user.Email</span>
+                    </p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div>
+                    <h5 class="card-title">Current User Roles</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @{
+                            int roleCount = 0;
+                            foreach (var r in Model)
+                            {
+                                if ((r.IdentityRoles != null) && (r.IsChecked == true))
+                                {
+                                    <li class="list-group-item">@r.IdentityRoles.Name</li>
+                                    roleCount++;
+                                }
+                            }
+                            if (roleCount == 0)
+                            {
+                                <li class="text-danger list-group-item">No matching roles found for <span>@user.FirstName</span></li>
+                            }
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-  
-    <div class="card">
-        <div class="card-header">
-            <h2 class="card-title">Assigned User Roles </h2>
-        </div>
-        <div class="card-body">
-            @{ 
-                int roleCount = 0;
-                foreach (var r in Model)
+    <form method="post" class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center">Add and Remove Roles For <span>@user.FirstName</span></h4>
+            </div>
+            <div class="card-body">
+                @for (int i = 0; i < Model.Count; i++)
                 {
-                    if ((r.IdentityRoles != null) && (r.IsChecked == true))
-                    {
-                        <h5>@r.IdentityRoles.Name</h5>
-                        roleCount++;
-                    }
+                    <div class="form-check">
+                        <input type="hidden" asp-for="@Model[i].IdentityRoles.Id" />
+                        <input type="hidden" asp-for="@Model[i].IdentityRoles.Name" />
+                        <input asp-for="@Model[i].IsChecked" class="form-check-input" />
+                        <label>@Model[i].IdentityRoles.Name </label>
+                    </div>
                 }
-                if (roleCount == 0)
-                {
-                    <p class="text-danger">No matching roles found with this user</p>
-                }
-            }
+            </div>
+
+            <div class="card-footer">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <a type="submit" class="btn btn-primary" asp-action="Index" asp-controller="RoleManager">Cancel</a>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 
-<form method="post">
-    <div class="card">
-        <div class="card-header">
-            <h3>Add and Remove Roles For @User</h3>
-        </div>
-        <div class="card-body">
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                <div class="form-check">
-                    <input type="hidden" asp-for="@Model[i].IdentityRoles.Id" />
-                    <input type="hidden" asp-for="@Model[i].IdentityRoles.Name" />
-                    <input asp-for="@Model[i].IsChecked" class="form-check-input" />
-                    <label>@Model[i].IdentityRoles.Name </label>
-                </div>
-            }
-        </div>
-
-        <div class="card-footer">
-            <input type="submit" value="Update" class="btn btn-primary" />
-            <a type="submit" class="btn btn-primary" asp-action="Index" asp-controller="RoleManager">Cancel</a>
-        </div>
-    </div>
-</form>
