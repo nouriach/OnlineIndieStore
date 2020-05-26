@@ -1,7 +1,12 @@
 ﻿@model List<OnlineIndieStore.VMs.EditsUsersInRolesViewModel>;
 
 @{
-    var User = @ViewBag.User;
+    AppUser user = new AppUser
+    {
+        FirstName = ViewBag.FirstName,
+        UserName = ViewBag.UserName,
+        Email = ViewBag.Email
+    };
 }
 
 <div>
@@ -13,53 +18,36 @@
             <h2 class="card-title">Selected User</h2>
         </div>
         <div>
-            <h3>@User</h3>
-            @*<p>
-                    @Model.AppUser.Id
+            <h4 class="card-title">
+                @user.FirstName
+            </h4>
+            <div class="d-flex card-body">
+                <p class="mr-2">
+                    @user.UserName
                 </p>
-                <h4 class="card-title">
-                    @Model.AppUser.FirstName
-                </h4>
-                <div class="d-flex card-body">
-                    <p class="mr-2">
-                        @Model.AppUser.UserName
-                    </p>
-                    <p class="mr-2">
-                        @Model.AppUser.Email
-                    </p>
-                </div>*@
+                <p class="mr-2">
+                    @user.Email
+                </p>
+            </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">
-            <h2>Available Roles</h2>
-        </div>
-        <div class="card-body">
-            @foreach (var t in Model)
-            {
-                if (t.IdentityRoles != null)
-                {
-                    <h5>@t.IdentityRoles.Name</h5>
-                }
-                else
-                {
-                    <p class="text-danger">No matching roles found with this user</p>
-                }
-            }
-        </div>
-    </div>
+  
     <div class="card">
         <div class="card-header">
             <h2 class="card-title">Assigned User Roles </h2>
         </div>
         <div class="card-body">
-            @foreach (var t in Model)
-            {
-                if ((t.IdentityRoles != null) && (t.IsChecked == true))
+            @{ 
+                int roleCount = 0;
+                foreach (var r in Model)
                 {
-                    <h5>@t.IdentityRoles.Name</h5>
+                    if ((r.IdentityRoles != null) && (r.IsChecked == true))
+                    {
+                        <h5>@r.IdentityRoles.Name</h5>
+                        roleCount++;
+                    }
                 }
-                else
+                if (roleCount == 0)
                 {
                     <p class="text-danger">No matching roles found with this user</p>
                 }
@@ -87,25 +75,7 @@
 
         <div class="card-footer">
             <input type="submit" value="Update" class="btn btn-primary" />
-            <a type="submit" class="btn btn-primary" asp-action="EditUsersInRoles" asp-controller="RoleManager">Cancel</a>
+            <a type="submit" class="btn btn-primary" asp-action="Index" asp-controller="RoleManager">Cancel</a>
         </div>
     </div>
 </form>
-
-@*/*****
-
-    <h5>Available Roles</h5>
-    @foreach (var roleOption in @ViewBag.AvailableRoles)
-    {
-        <div class="checkbox">
-            <label name="IdentityRoles">
-                <input value="@roleOption" type="checkbox" asp-for="@Model.IsChecked" />
-                @roleOption
-            </label>
-        </div>
-    }
-    <div class="form-group">
-        <input type="submit" value="Update" class="btn btn-primary" />
-    </div>
-
-    *****/*@
