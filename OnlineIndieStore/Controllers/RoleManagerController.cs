@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineIndieStore.Models;
@@ -9,6 +10,8 @@ using OnlineIndieStore.VMs;
 
 namespace OnlineIndieStore.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin")]
+
     public class RoleManagerController : Controller
     {
         public RoleManager<IdentityRole> rolesManager { get; set; }
@@ -46,6 +49,7 @@ namespace OnlineIndieStore.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public async Task<IActionResult> CreateRoles(RoleViewModel roleView)
         {
@@ -77,7 +81,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         /***** EDIT ROLES *****/
-
+        [Authorize(Roles = "SuperAdmin")]
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
@@ -107,6 +111,7 @@ namespace OnlineIndieStore.Controllers
             }
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public async Task<IActionResult> EditRole(EditRoleViewModel newModel)
         {
@@ -135,6 +140,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         /***** DELETE ROLES *****/
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpGet]
         public async Task<IActionResult> DeleteRole(string id)
@@ -164,6 +170,7 @@ namespace OnlineIndieStore.Controllers
                 return View(model);
             }
         }
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpPost]
         public async Task<IActionResult> DeleteRole(EditRoleViewModel newModel)
@@ -192,7 +199,6 @@ namespace OnlineIndieStore.Controllers
         }
 
         /****** Assign Role to a User *******/
-
         [HttpGet]
         public async Task<IActionResult> EditUsersInRoles(string id)
         {
@@ -227,6 +233,7 @@ namespace OnlineIndieStore.Controllers
             }
             return View(userRoleList);
         }
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpPost]
         public async Task<IActionResult> EditUsersInRoles(List<EditsUsersInRolesViewModel> model, string id)

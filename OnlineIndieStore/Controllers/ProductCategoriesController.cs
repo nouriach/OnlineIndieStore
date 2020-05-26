@@ -9,7 +9,7 @@ using OnlineIndieStore.Data;
 using OnlineIndieStore.Models;
 using OnlineIndieStore.VMs;
 using OnlineIndieStore.Utilities;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -232,6 +232,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories/Create
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public IActionResult Create()
         {
             //ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
@@ -244,6 +245,8 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Create
+        [Authorize(Roles = "Admin, SuperAdmin")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductCategoryID,ProductID,CategoryID,Product, Category, Selection")] ProductCategory productCategory)
@@ -299,6 +302,8 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Edit/5
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductCategoryID,ProductID,CategoryID,Selection")] ProductCategory productCategory)
@@ -334,6 +339,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories/Delete/5
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -354,6 +360,10 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: ProductCategories/Delete/5
+        [Authorize(Roles = "SuperAdmin")]
+
+
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

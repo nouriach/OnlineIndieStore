@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ using OnlineIndieStore.Models;
 
 namespace OnlineIndieStore.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin")]
+
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;
@@ -67,8 +70,8 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryName", "IsChecked")] List<CategoryName> IsChecked)
@@ -100,6 +103,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: Categories/Edit/5
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -116,8 +120,9 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,CategoryName")] Category category)
@@ -169,6 +174,8 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: Categories/Delete/5
+        [Authorize(Roles = "SuperAdmin")]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
