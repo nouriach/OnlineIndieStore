@@ -27,8 +27,18 @@ namespace OnlineIndieStore.Controllers
 
         public IActionResult Buy (string id)
         {
-            Product product = new Product();
             if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
+            {
+                List<Item> cart = new List<Item>();
+                Item item = new Item()
+                {
+                    Product = _context.Products.Where(p => p.ID.ToString() == id).FirstOrDefault(),
+                    Quantity = 1
+                };
+                cart.Add(item);
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            }
+            else
             {
                 List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
                 int index = isExist(id);
@@ -38,11 +48,12 @@ namespace OnlineIndieStore.Controllers
                 }
                 else
                 {
-                    cart.Add(new Item
+                    Item newItem = new Item()
                     {
                         Product = _context.Products.Where(p => p.ID.ToString() == id).FirstOrDefault(),
                         Quantity = 1
-                    });
+                    };
+                    cart.Add(newItem);
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
@@ -59,11 +70,13 @@ namespace OnlineIndieStore.Controllers
 
         private int isExist(string id)
         {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            List<Item> cart = new List<Item>();
+           
+            cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+
             for (int i = 0; i < cart.Count; i++)
             {
-                // Should this ToString() the Product ID?
-                if (cart[i].Product.ID.Equals(id))
+                if (cart[i].Product.ID.ToString().Equals(id))
                 {
                     return i;
                 }
