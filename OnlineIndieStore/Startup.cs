@@ -27,8 +27,6 @@ namespace OnlineIndieStore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSession();
-
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -52,7 +50,6 @@ namespace OnlineIndieStore
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();
