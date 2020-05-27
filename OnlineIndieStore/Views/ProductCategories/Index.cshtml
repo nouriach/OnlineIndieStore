@@ -4,12 +4,19 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-@*Revisit:
-    https://mdbootstrap.com/docs/jquery/components/cards/*@
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="mb-3 text-center">
+    <h2 class="text-center">Shop Indie</h2>
+    <h6>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</h6>
+</div>
+
+<div class="d-flex justify-content-around m-4">
+    <p>
+        <a asp-action="Create">Category Admin area</a>
+    </p>
+    <p>
+        <a asp-controller="Products" asp-action="Create">Submit Product</a>
+    </p>
+</div>
 
 <ul class="nav nav-pills d-flex justify-content-around pb-3">
     <li class="nav-item dropdown">
