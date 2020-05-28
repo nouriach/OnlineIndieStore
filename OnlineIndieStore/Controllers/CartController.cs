@@ -20,6 +20,7 @@ namespace OnlineIndieStore.Controllers
         public IActionResult Index()
         {
             var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            // when the cart is captured it doesn't bring in the Product's Image reference.
             ViewBag.cart = cart;
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             return View();
@@ -70,13 +71,14 @@ namespace OnlineIndieStore.Controllers
 
         private int isExist(string id)
         {
+            int idToInt = int.Parse(id);
             List<Item> cart = new List<Item>();
            
             cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
 
             for (int i = 0; i < cart.Count; i++)
             {
-                if (cart[i].Product.ID.ToString().Equals(id))
+                if (cart[i].Product.ID.Equals(idToInt))
                 {
                     return i;
                 }

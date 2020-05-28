@@ -1,28 +1,36 @@
 ﻿
 <div>
     <h3>Your Cart</h3>
-    <table>
-        <tr>
-            <th>Option</th>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Photo</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Sub Total</th>
-        </tr>
-        @foreach(var item in @ViewBag.cart)
-        {
-    <tr>
-        <td><a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.ID ">Remove</a></td>
-        <td>@item.Product.ID</td>
-        <td>@item.Product.Name</td>
-        <td>Product Image goes Here</td>
-        <td>@item.Product.Price</td>
-        <td>@item.Quantity</td>
-        <td>(@item.Product.Price * @item.Quantity)</td>
-    </tr>
-        }
+    <table class="table table-hover">
+        <caption>Your Basket</caption>
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">ID</th>
+                <th scope="col">Photo</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Sub Total</th>
+                <th scope="col">Option</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in @ViewBag.cart)
+            {
+            <tr>
+                <th scope="row">@item.Product.Name</th>
+                <td>@item.Product.ID</td>
+                <td>
+                    Image Here
+                     @*img class="card-img-top p-3" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="100" height="100" />*@
+                </td>
+                <td>@item.Product.Price</td>
+                <td>@item.Quantity</td>
+                <td>(@item.Product.Price * @item.Quantity)</td>
+                <td><a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.ID ">Remove</a></td>
+            </tr>
+            }
+        </tbody>
         <tr>
             <td align="right" class="col-6">Sum</td>
             <td>
