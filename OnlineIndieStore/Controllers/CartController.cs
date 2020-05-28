@@ -19,10 +19,16 @@ namespace OnlineIndieStore.Controllers
         }
         public IActionResult Index()
         {
-            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            List<Item> cart = new List<Item>();
+            cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             // when the cart is captured it doesn't bring in the Product's Image reference.
-            ViewBag.cart = cart;
-            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+
+
+            if (cart != null)
+            {
+                ViewBag.cart = cart;
+                ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            }
             return View();
         }
 

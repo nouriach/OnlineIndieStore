@@ -15,20 +15,43 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in @ViewBag.cart)
+            @if (@ViewBag.cart != null)
             {
-            <tr>
-                <th scope="row">@item.Product.Name</th>
-                <td>@item.Product.ID</td>
-                <td>
-                    Image Here
-                     @*img class="card-img-top p-3" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="100" height="100" />*@
-                </td>
-                <td>@item.Product.Price</td>
-                <td>@item.Quantity</td>
-                <td>(@item.Product.Price * @item.Quantity)</td>
-                <td><a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.ID ">Remove</a></td>
-            </tr>
+                @foreach (var item in @ViewBag.cart)
+                {
+                    <tr>
+                        <th scope="row">@item.Product.Name</th>
+                        <td>@item.Product.ID</td>
+                        <td>
+                            Image Here
+                            @*img class="card-img-top p-3" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="100" height="100" />*@
+                        </td>
+                        <td>@item.Product.Price</td>
+                        <td>@item.Quantity</td>
+                        @if (ViewBag.Total > 0)
+                        {
+                            <td>(@item.Product.Price * @item.Quantity)</td>
+                        }
+                        else
+                        {
+                            <td>
+                            </td>
+                        }
+                        <td><a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.ID ">Remove</a></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td scope="col">#</td>
+                    <td>#</td>
+                    <td>#</td>
+                    <td>#</td>
+                    <td>#</td>
+                    <td>#</td>
+                    <td>#</td>
+                </tr>
             }
         </tbody>
         <tr>
