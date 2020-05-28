@@ -23,8 +23,8 @@
                 <th scope="row">@item.Product.Name</th>
                 <td>@item.Product.ID</td>
                 <td>
-                    Image Here
-                    @*img class="card-img-top p-3" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="100" height="100" />*@
+                    @*Image Here*@
+                    <img class="card-img-top p-3" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="100" height="100" />
                 </td>
                 <td>@item.Product.Price</td>
                 @if (item.Quantity > 1)

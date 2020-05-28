@@ -24,6 +24,10 @@ namespace OnlineIndieStore.Controllers
             // when the cart is captured it doesn't bring in the Product's Image reference.
             if (cart != null)
             {
+                foreach(var product in cart)
+                {
+                    product.Product.Image = _context.Images.Where(x => x.ProductID == product.Product.ID).FirstOrDefault();
+                }
                 ViewBag.cart = cart;
                 ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             }
