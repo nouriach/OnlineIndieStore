@@ -22,8 +22,6 @@ namespace OnlineIndieStore.Controllers
             List<Item> cart = new List<Item>();
             cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             // when the cart is captured it doesn't bring in the Product's Image reference.
-
-
             if (cart != null)
             {
                 ViewBag.cart = cart;
@@ -74,6 +72,35 @@ namespace OnlineIndieStore.Controllers
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
+
+        public IActionResult ChangeQuantity(string id, string quantityChange)
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+
+            if(index != -1)
+            {
+                if ((quantityChange == "minus") && (cart[index].Quantity != 1))
+                {
+                    cart[index].Quantity -= 1;
+                }
+                else if (quantityChange == "plus")
+                {
+                    cart[index].Quantity += 1;
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            } 
+            else
+            {
+                return NotFound();
+            }
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+        // UTILITY METHODS
 
         private int isExist(string id)
         {
