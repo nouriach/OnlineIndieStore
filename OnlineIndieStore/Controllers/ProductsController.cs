@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineIndieStore.Controllers
 {
@@ -74,31 +75,6 @@ namespace OnlineIndieStore.Controllers
 
             int pageSize = 3;
 
-            // Filter products
-            //switch (order)
-            //{
-            //    case "ByPriceAscending":
-            //        return View(
-            //            await appDbContext
-            //            .OrderBy(x => x.Price)
-            //            .ToListAsync()
-            //            );
-            //    case "ByPriceDescending":
-            //        return View(
-            //            await appDbContext
-            //            .OrderByDescending(x => x.Price)
-            //            .ToListAsync()
-            //            );
-            //    case "ByNameDescending":
-            //        return View(
-            //            await appDbContext
-            //            .OrderByDescending(x => x.Name)
-            //            .ToListAsync()
-            //            );
-            //    default:
-            //        return View(await appDbContext.OrderBy(x => x.Name).ToListAsync());
-            //}
-
             return View(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
@@ -142,6 +118,8 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "GeneralUser, Admin, SuperAdmin")]
+
         public IActionResult Create()
         {
             ViewBag.Options = UtilityMethods.GetCategoryEnumsAsList();
@@ -150,6 +128,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // POST: Products/Create
+        [Authorize(Roles = "GeneralUser, Admin, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCategoryViewModel newProdCat)

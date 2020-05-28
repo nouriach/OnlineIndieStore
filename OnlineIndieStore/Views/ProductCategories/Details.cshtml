@@ -1,4 +1,10 @@
-﻿@model OnlineIndieStore.VMs.DisplayProductViewModel
+﻿
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+@model OnlineIndieStore.VMs.DisplayProductViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -9,7 +15,7 @@
 <div>
     <div class="d-flex">
         <div>
-            <img src="@("~/image/" + Model.Image.ImageName)" asp-append-version="true" width="300" height="300" />
+            <img src="@("~/image/" + Model.Image.ImageName)" asp-append-version="true" width="300" height="300" class="rounded" />
         </div>
         <div>
             <h5>@Model.Product.Name</h5>
@@ -19,7 +25,7 @@
     </div>
     <div>
         <h4>Categories</h4>
-        @foreach(var cat in Model.Categories)
+        @foreach (var cat in Model.Categories)
         {
             <p>@cat.CategoryName</p>
         }
@@ -31,6 +37,10 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Product.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model.Product.ID">Edit</a>
+    }
+    <a asp-controller="Cart" asp-action="Buy" asp-route-id="@Model.Product.ID" class="btn btn-success">Add to Cart</a>
 </div>

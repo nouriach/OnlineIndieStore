@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineIndieStore.Data;
 using OnlineIndieStore.Helpers;
@@ -9,6 +10,7 @@ using OnlineIndieStore.Models;
 
 namespace OnlineIndieStore.Controllers
 {
+    [Authorize(Roles = "GeneralUser, Admin, SuperAdmin")]
     public class CartController : Controller
     {
         private AppDbContext _context;

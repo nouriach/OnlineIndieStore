@@ -1,24 +1,39 @@
 ﻿@model List<OnlineIndieStore.VMs.DisplayProductViewModel>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="mb-3 text-center">
+<div class="m-3 text-center">
     <h2 class="text-center">Shop Indie</h2>
     <h6>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</h6>
 </div>
 
-<div class="d-flex justify-content-around m-4">
-    <p>
-        <a asp-action="Create">Category Admin area</a>
-    </p>
-    <p>
-        <a asp-controller="Products" asp-action="Create">Submit Product</a>
-    </p>
-</div>
+@if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+{
+    <div class="d-flex justify-content-around m-4">
+        <p>
+            <a  class="btn btn-info " asp-action="Create">Category Admin area</a>
+        </p>
+        <p>
+            <a class="btn btn-secondary" asp-controller="Products" asp-action="Create">Submit Product</a>
+        </p>
+    </div>
+}
+else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("GeneralUser"))
+{
+<div class="d-flex justify-content-around p-3">
+    <a class="btn btn-secondary" asp-controller="Products" asp-action="Create">Submit Product</a>
 
-<ul class="nav nav-pills d-flex justify-content-around pb-3">
+</div>
+}
+
+
+<ul class="nav nav-pills d-flex justify-content-around p-3">
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filter Categories</a>
         <div class="dropdown-menu">
@@ -65,7 +80,7 @@
                 <div class="card mb-4 ml-2 mr-2 border border-info">
                     @*IMAGE*@
                     <div>
-                        <img class="card-img-top p-3" src="@("~/image/" + prod.Image.ImageName)" asp-append-version="true" width="300" height="300" />
+                        <img class="rounded card-img-top p-3" src="@("~/image/" + prod.Image.ImageName)" asp-append-version="true" width="300" height="300" />
                     </div>
                     @*CATEGORIES*@
                     <div class="card-body d-flex justify-content-around">
@@ -95,39 +110,3 @@
     </div>
 </div>
 
-@*<div class="modal fade" id="productDetails" tabindex="-1" role="dialog" aria-labelledby="productDetailsTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productDetailsTitle"> </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body d-flex">
-                <img class="card-img-top p-3" alt="text" src="#" />
-                <div>
-                    <div>
-                        <p>  </p>
-                        <p></p>
-                        <a asp-action="Index" asp-route-selectionOrder="">
-                            <small class="text-muted"></small>
-                        </a>
-                    </div>
-                    <div class="card-body d-flex justify-content-around">
-                        @foreach (var item in )
-                        {
-                            <a asp-action="Index" asp-route-categoryOrder="@item.CategoryName.ToString()" class="badge-pill badge-info">
-                                @Html.DisplayFor(modelItem => item.CategoryName)
-                            </a>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Add to Basket</button>
-            </div>
-        </div>
-    </div>
-</div>*@
