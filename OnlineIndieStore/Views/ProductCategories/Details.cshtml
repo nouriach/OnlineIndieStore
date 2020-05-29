@@ -10,37 +10,49 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <div class="d-flex">
-        <div>
-            <img src="@("~/image/" + Model.Image.ImageName)" asp-append-version="true" width="300" height="300" class="rounded" />
-        </div>
-        <div>
-            <h5>@Model.Product.Name</h5>
-            <p>@Model.Product.Description</p>
-            <p>@Model.Product.Price</p>
-        </div>
-    </div>
-    <div>
-        <h4>Categories</h4>
-        @foreach (var cat in Model.Categories)
-        {
-            <p>@cat.CategoryName</p>
-        }
-    </div>
-    <div>
-        <h4>Selection</h4>
-        <p>@Model.Selection</p>
-    </div>
+    <h1 class="text-center p-4">Details</h1>
 </div>
 
-<div>
+<div class="container d-flex justify-content-around">
+    <div class="card col-4">
+        <img src="@("~/image/" + Model.Image.ImageName)" asp-append-version="true" width="300" height="300" class="rounded mx-auto d-block card-body" />
+    </div>
+    <div class="card col-8" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Product.Name</h5>
+            <h6 class="card-subtitle mb-2 text-muted">@Model.Product.Price</h6>
+            <p class="card-text">@Model.Product.Description</p>
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model.Product.ID">Edit</a>
+            }
+            <a asp-controller="Cart" asp-action="Buy" asp-route-id="@Model.Product.ID" class="btn btn-success">Add to Cart</a>
+        </div>
+        <div class="card-body d-flex justify-content-end">
+            <div class="card mr-3">
+                <div class="card-header">
+                   Categories
+                </div>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li class="list-group-item">@cat.CategoryName</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Selection
+                </div>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">@Model.Selection</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="m-3">
     <a class="btn btn-secondary" asp-action="Index">Back to List</a>
-    @if (User.IsInRole("SuperAdmin"))
-    {
-        <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model.Product.ID">Edit</a>
-    }
-    <a asp-controller="Cart" asp-action="Buy" asp-route-id="@Model.Product.ID" class="btn btn-success">Add to Cart</a>
 </div>
