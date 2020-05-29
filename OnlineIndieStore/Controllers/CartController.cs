@@ -11,7 +11,7 @@ using OnlineIndieStore.Models;
 namespace OnlineIndieStore.Controllers
 {
     [Authorize(Roles = "GeneralUser, Admin, SuperAdmin")]
-    public class CartController : BaseController
+    public class CartController : Controller
     {
         private AppDbContext _context;
 

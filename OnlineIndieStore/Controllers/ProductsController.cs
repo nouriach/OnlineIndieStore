@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineIndieStore.Controllers
 {
-    public class ProductsController : BaseController
+    public class ProductsController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;

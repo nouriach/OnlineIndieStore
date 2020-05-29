@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnlineIndieStore.Data;
-using OnlineIndieStore.Helpers;
 using OnlineIndieStore.Models;
 using OnlineIndieStore.VMs;
 
 namespace OnlineIndieStore.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _context;
@@ -26,25 +25,6 @@ namespace OnlineIndieStore.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-
-        
-        public IActionResult SetBasketForLoginPartial()
-        {
-            List<Item> cart = new List<Item>();
-            cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-            // when the cart is captured it doesn't bring in the Product's Image reference.
-            if (cart != null)
-            {
-                int quantity = 0;
-                foreach (var prod in cart)
-                {
-                    quantity += prod.Quantity;
-                }
-                ViewBag.cart = cart;
-                ViewBag.quantity = quantity;
-            }
-            return PartialView("_LoginPartial");
         }
 
         public IActionResult Privacy()

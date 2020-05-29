@@ -13,7 +13,7 @@ namespace OnlineIndieStore.Controllers
 {
     [Authorize(Roles = "Admin, SuperAdmin")]
 
-    public class CategoriesController : BaseController
+    public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;
 

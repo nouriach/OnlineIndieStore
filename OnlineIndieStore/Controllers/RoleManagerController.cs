@@ -12,7 +12,7 @@ namespace OnlineIndieStore.Controllers
 {
     [Authorize(Roles = "Admin, SuperAdmin")]
 
-    public class RoleManagerController : BaseController
+    public class RoleManagerController : Controller
     {
         public RoleManager<IdentityRole> rolesManager { get; set; }
         private readonly UserManager<AppUser> _user;
