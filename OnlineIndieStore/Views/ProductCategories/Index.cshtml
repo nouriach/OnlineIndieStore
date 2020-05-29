@@ -76,7 +76,7 @@ else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole(
     <div class="row justify-content-center">
         @foreach (var prod in Model)
         {
-            <div class="col-md-4">
+            <div class="col-md-6 col-sm-12 col-xl-4">
                 <div class="card mb-4 ml-2 mr-2 border border-info">
                     @*IMAGE*@
                     <div>
@@ -101,8 +101,10 @@ else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole(
                     </div>
                     @*ADD TO BASKET*@
                     <div class="card-footer d-flex justify-content-around">
-                        <a asp-action="Details" asp-route-productName="@prod.Product.Name">Details</a>
-                        <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID" class="btn btn-success">Add to Cart</a>
+                        <a asp-action="Details" asp-route-productName="@prod.Product.Name" class="btn btn-outline-info ">Details</a>
+                        <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID" class="btn btn-outline-success">Add to Cart</a>
+                        <a asp-controller="#" asp-action="#" asp-route-id="@prod.Product.ID" class="btn btn-outline-secondary">Favourite</a>
+
                     </div>
                 </div>
             </div>
