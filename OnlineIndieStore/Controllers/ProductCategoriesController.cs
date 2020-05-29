@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineIndieStore.Controllers
 {
-    public class ProductCategoriesController : Controller
+    public class ProductCategoriesController : BaseController
     {
         private readonly AppDbContext _context;
 

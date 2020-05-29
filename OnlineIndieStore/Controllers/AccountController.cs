@@ -11,7 +11,7 @@ using OnlineIndieStore.VMs;
 
 namespace OnlineIndieStore.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
 
         private ILogger _logger;
