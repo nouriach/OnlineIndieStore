@@ -103,7 +103,7 @@ else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole(
                     <div class="card-footer d-flex justify-content-around">
                         <a asp-action="Details" asp-route-productName="@prod.Product.Name" class="btn btn-outline-info ">Details</a>
                         <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID" class="btn btn-outline-success">Add to Cart</a>
-                        <a asp-controller="#" asp-action="#" asp-route-id="@prod.Product.ID" class="btn btn-outline-secondary">Favourite</a>
+                        <a asp-controller="Favourite" asp-action="AddProductToFavourite" asp-route-id="@prod.Product.ID" class="btn btn-outline-secondary">Favourite</a>
 
                     </div>
                 </div>
