@@ -65,7 +65,7 @@ With this as a start, the core brief was to rebuild it using the aforementioned 
 
 # Backlog
 - Create a 'Favourites' section
-- Auto-resize image on upload when
+- When a user uploads an image make sure the file is auto-resized 
 - Update FrontEnd design to match the original website (https://shopindie.8px.design/)
 - Combine all admin areas into one uniform page/dashboard
 
