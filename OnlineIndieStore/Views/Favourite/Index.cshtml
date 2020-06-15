@@ -1,2 +1,22 @@
 ﻿
-<h1>Hello from Favourites</h1>
+<div>
+    <h1>Hello from Favourites</h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        @foreach (var prod in ViewBag.favourites)
+        {
+            <div class="col-md-6 col-sm-12 col-xl-4">
+                <div class="card mb-4 ml-2 mr-2 border border-info">
+                    <img class="rounded card-img-top p-3" src="@("~/image/" + prod.Product.Image.ImageName)" asp-append-version="true" width="300" height="300" />
+                </div>
+                @*PRODUCT CONTENT: TITLE, PRICE & SELECTION*@
+                <div class="card-body mb-1">
+                    <h5 class="card-title">@prod.Product.Name</h5>
+                    <p class="card-text">@prod.Product.Price </p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
