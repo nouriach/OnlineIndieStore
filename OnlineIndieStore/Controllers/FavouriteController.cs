@@ -49,9 +49,40 @@ namespace OnlineIndieStore.Controllers
             else
             {
                 List<Item> favourites = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "favourites");
+                Item newItem = new Item()
+                {
+                    Product = _context.Products.Where(x => x.ID.ToString() == id).FirstOrDefault()
+                };
+                favourites.Add(newItem);
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "favourites", favourites);
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult RemoveProductFromFavourite(string id)
+        {
+            List<Item> favourites = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "favourites");
+            int index = isExist(id);
+            favourites.RemoveAt(index);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "favourites", favourites);
+            return RedirectToAction("Index");
+        }
+
+        private int isExist(string id)
+        {
+            int idToInt = int.Parse(id);
+            List<Item> favourites = new List<Item>();
+
+            favourites = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "favourites");
+
+            for (int i = 0; i < favourites.Count; i++)
+            {
+                if (favourites[i].Product.ID.Equals(idToInt))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }
