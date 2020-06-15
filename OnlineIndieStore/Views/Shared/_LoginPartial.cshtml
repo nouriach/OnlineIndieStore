@@ -14,7 +14,7 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <h6 class="dropdown-header">Your Account</h6>
                 <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" asp-controller="Favourite" asp-action="Index">Favourites</a>
                 @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
                 {
                     <a class="dropdown-item" asp-controller="RoleManager" asp-action="Index">Manage User Access</a>
