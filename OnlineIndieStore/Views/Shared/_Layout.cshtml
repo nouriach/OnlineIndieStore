@@ -12,6 +12,7 @@
     <title>@ViewData["Title"] - Shop Indie</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/toastr/toastr.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -66,7 +67,7 @@
                             </li>
                         }
                     </ul>
-                </div>              
+                </div>
                 <partial name="_LoginPartial.cshtml" />
             </div>
         </nav>
@@ -74,6 +75,19 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            
+            @{ 
+                if (ViewBag.message == "Added")
+                {
+                    <script>
+
+                        $(function () { 
+                            toastr.info('Added.');
+                        });
+
+                    </script>
+                }
+            }
         </main>
     </div>
 
@@ -82,9 +96,13 @@
             &copy; 2020 - Shop Indie - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/toastr/toastr.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

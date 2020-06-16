@@ -18,7 +18,7 @@ namespace OnlineIndieStore.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string message)
         {
             List<Item> favourites = new List<Item>();
             favourites = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "favourites");
@@ -31,6 +31,12 @@ namespace OnlineIndieStore.Controllers
                 }
                 ViewBag.favourites = favourites;
             }
+
+            if (!String.IsNullOrEmpty(message))
+            {
+                ViewBag.message = message;
+            }
+
             return View();
         }
 
@@ -63,7 +69,7 @@ namespace OnlineIndieStore.Controllers
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "favourites", favourites);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = "Added" });
         }
 
         public IActionResult RemoveProductFromFavourite(string id)
