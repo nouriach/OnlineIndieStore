@@ -75,16 +75,22 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
-            
-            @{ 
-                if (ViewBag.message == "Added")
+
+            @{
+                if (ViewBag.message == "AddToFavourites")
                 {
                     <script>
-
-                        $(function () { 
-                            toastr.info('Added.');
+                        $(function () {
+                            toastr.success('Item has been added to your favourites');
                         });
-
+                    </script>
+                }
+                else if (ViewBag.message == "AddToCart")
+                {
+                    <script>
+                        $(function () {
+                            toastr.success('Item has been added to your cart');
+                        });
                     </script>
                 }
             }

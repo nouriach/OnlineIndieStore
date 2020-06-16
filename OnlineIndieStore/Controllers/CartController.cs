@@ -68,7 +68,7 @@ namespace OnlineIndieStore.Controllers
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "ProductCategories", new { message = "AddToCart" });
         }
         public IActionResult Remove(string id)
         {

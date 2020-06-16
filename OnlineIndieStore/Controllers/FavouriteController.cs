@@ -57,7 +57,7 @@ namespace OnlineIndieStore.Controllers
                 List<Item> favourites = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "favourites");
                 if (favourites.Any(p => p.Product.ID.ToString() == id))
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "ProductCategories");
                 }
                 else
                 {
@@ -69,7 +69,7 @@ namespace OnlineIndieStore.Controllers
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "favourites", favourites);
             }
-            return RedirectToAction("Index", new { message = "Added" });
+            return RedirectToAction("Index", "ProductCategories", new { message = "AddToFavourites" });
         }
 
         public IActionResult RemoveProductFromFavourite(string id)

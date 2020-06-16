@@ -17,7 +17,7 @@
 {
     <div class="d-flex justify-content-around m-4">
         <p>
-            <a  class="btn btn-info " asp-action="Create">Category Admin area</a>
+            <a class="btn btn-info " asp-action="Create">Category Admin area</a>
         </p>
         <p>
             <a class="btn btn-secondary" asp-controller="Products" asp-action="Create">Submit Product</a>
@@ -26,10 +26,10 @@
 }
 else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole("GeneralUser"))
 {
-<div class="d-flex justify-content-around p-3">
-    <a class="btn btn-secondary" asp-controller="Products" asp-action="Create">Submit Product</a>
+    <div class="d-flex justify-content-around p-3">
+        <a class="btn btn-secondary" asp-controller="Products" asp-action="Create">Submit Product</a>
 
-</div>
+    </div>
 }
 
 
@@ -112,3 +112,4 @@ else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole(
     </div>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>

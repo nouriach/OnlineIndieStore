@@ -23,7 +23,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public IActionResult Index(string? order, string? categoryOrder, string? selectionOrder)
+        public IActionResult Index(string? order, string? categoryOrder, string? selectionOrder, string message)
         {
             var appDbContext = _context.Products
                 .Include(pc => pc.ProductCategories)
@@ -51,6 +51,11 @@ namespace OnlineIndieStore.Controllers
             { 
                 var returnFilteredSelection = FilterProductsBySelection(selectionOrder);
                 return View(returnFilteredSelection);
+            }
+
+            if (!String.IsNullOrEmpty(message))
+            {
+                ViewBag.message = message;
             }
 
             return View(displayAllProducts.OrderBy(x => x.Product.Name).ToList());
