@@ -49,11 +49,18 @@ namespace OnlineIndieStore.Controllers
             else
             {
                 List<Item> favourites = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "favourites");
-                Item newItem = new Item()
+                if (favourites.Any(p => p.Product.ID.ToString() == id))
                 {
-                    Product = _context.Products.Where(x => x.ID.ToString() == id).FirstOrDefault()
-                };
-                favourites.Add(newItem);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    Item newItem = new Item()
+                    {
+                        Product = _context.Products.Where(x => x.ID.ToString() == id).FirstOrDefault()
+                    };
+                    favourites.Add(newItem);
+                }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "favourites", favourites);
             }
             return RedirectToAction("Index");
