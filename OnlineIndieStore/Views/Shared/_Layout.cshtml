@@ -79,17 +79,43 @@
             @{
                 if (ViewBag.message == "AddToFavourites")
                 {
+                    //How do you add a controller/method to the below toast alert?
                     <script>
                         $(function () {
-                            toastr.success('Item has been added to your favourites');
-                        });
+                    Command: toastr["success"]("<div><a href='https://codeseven.github.io/toastr/' target='_blank'>Click to View Favourites</a></div>", "Item Added to Favourites")
+                            toastr.options = {
+                            "closeButton": true,
+                              "positionClass": "toast-top-right",
+                              "showDuration": "300",
+                              "hideDuration": "1000",
+                              "timeOut": "5000",
+                              "extendedTimeOut": "1000",
+                              "showEasing": "swing",
+                              "hideEasing": "linear",
+                              "showMethod": "fadeIn",
+                              "hideMethod": "fadeOut"
+                            }
+                    });
                     </script>
                 }
                 else if (ViewBag.message == "AddToCart")
                 {
                     <script>
                         $(function () {
-                            toastr.success('Item has been added to your cart');
+                            Command: toastr["success"]("<div><a href='https://codeseven.github.io/toastr/' target='_blank'>Click to View Cart</a></div>", "Item Added to Cart")
+
+                            toastr.options = {
+                              "closeButton": true,
+                              "positionClass": "toast-top-right",
+                              "showDuration": "300",
+                              "hideDuration": "1000",
+                              "timeOut": "5000",
+                              "extendedTimeOut": "1000",
+                              "showEasing": "swing",
+                              "hideEasing": "linear",
+                              "showMethod": "fadeIn",
+                              "hideMethod": "fadeOut"
+                            }
                         });
                     </script>
                 }
