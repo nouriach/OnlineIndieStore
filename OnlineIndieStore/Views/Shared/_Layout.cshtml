@@ -82,20 +82,20 @@
                     //How do you add a controller/method to the below toast alert?
                     <script>
                         $(function () {
-                    Command: toastr["success"]("<div><a href='https://codeseven.github.io/toastr/' target='_blank'>Click to View Favourites</a></div>", "Item Added to Favourites")
+                            Command: toastr["success"]("<div><a href='https://codeseven.github.io/toastr/' target='_blank'>Click to View Favourites</a></div>", "Item Added to Favourites")
                             toastr.options = {
-                            "closeButton": true,
-                              "positionClass": "toast-top-right",
-                              "showDuration": "300",
-                              "hideDuration": "1000",
-                              "timeOut": "5000",
-                              "extendedTimeOut": "1000",
-                              "showEasing": "swing",
-                              "hideEasing": "linear",
-                              "showMethod": "fadeIn",
-                              "hideMethod": "fadeOut"
+                                "closeButton": true,
+                                "positionClass": "toast-top-right",
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
                             }
-                    });
+                        });
                     </script>
                 }
                 else if (ViewBag.message == "AddToCart")
@@ -105,16 +105,16 @@
                             Command: toastr["success"]("<div><a href='https://codeseven.github.io/toastr/' target='_blank'>Click to View Cart</a></div>", "Item Added to Cart")
 
                             toastr.options = {
-                              "closeButton": true,
-                              "positionClass": "toast-top-right",
-                              "showDuration": "300",
-                              "hideDuration": "1000",
-                              "timeOut": "5000",
-                              "extendedTimeOut": "1000",
-                              "showEasing": "swing",
-                              "hideEasing": "linear",
-                              "showMethod": "fadeIn",
-                              "hideMethod": "fadeOut"
+                                "closeButton": true,
+                                "positionClass": "toast-top-right",
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
                             }
                         });
                     </script>
@@ -128,9 +128,7 @@
             &copy; 2020 - Shop Indie - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/toastr/toastr.js"></script>
