@@ -23,7 +23,7 @@ namespace OnlineIndieStore.Controllers
         }
 
         // GET: ProductCategories
-        public IActionResult Index(string? order, string? categoryOrder, string? selectionOrder, string message)
+        public IActionResult Index(string? order, string? categoryOrder, string? selectionOrder, string? message)
         {
             var appDbContext = _context.Products
                 .Include(pc => pc.ProductCategories)
