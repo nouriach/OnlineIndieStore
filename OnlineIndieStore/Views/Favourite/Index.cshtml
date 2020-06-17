@@ -1,30 +1,38 @@
 ﻿
 <div>
-    <h1>Hello from Favourites</h1>
+    <h1>Your Favourites</h1>
 </div>
 
-<div class="container">
-    @foreach (var prod in ViewBag.favourites)
-    {
-        <div class="d-flex col-xl-12">
-            <div class="card mb-4 ml-2 mr-2 border border-info col-4">
-                <img class="rounded card-img-top p-3" src="@("~/image/" + prod.Product.Image.ImageName)" asp-append-version="true" width="300" height="300" />
-            </div>
-            @*PRODUCT CONTENT: TITLE, PRICE & SELECTION*@
-            <div class="card-body mb-1 col-8">
-                <div class="mb-4">
-                    <h5 class="card-title">@prod.Product.Name</h5>
-                    <p class="text-muted">@prod.Product.Description</p>
-                    <h4 class="card-text">@prod.Product.Price </h4>
+@if(ViewBag.favourites != null)
+{
+    <div class="container">
+        @foreach (var prod in ViewBag.favourites)
+        {
+            <div class="d-flex col-xl-12">
+                <div class="card mb-4 ml-2 mr-2 border border-info col-4">
+                    <img class="rounded card-img-top p-3" src="@("~/image/" + prod.Product.Image.ImageName)" asp-append-version="true" width="300" height="300" />
                 </div>
-                @*ADD TO BASKET*@
-                <div class="d-flex col-5 justify-content-between">
-                    <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID" class="btn btn-outline-success">Add to Cart</a>
-                    <a asp-controller="Favourite" asp-action="RemoveProductFromFavourite" asp-route-id="@prod.Product.ID" class="btn btn-outline-secondary">Remove</a>
+                @*PRODUCT CONTENT: TITLE, PRICE & SELECTION*@
+                <div class="card-body mb-1 col-8">
+                    <div class="mb-4">
+                        <h5 class="card-title">@prod.Product.Name</h5>
+                        <p class="text-muted">@prod.Product.Description</p>
+                        <h4 class="card-text">@prod.Product.Price </h4>
+                    </div>
+                    @*ADD TO BASKET*@
+                    <div class="d-flex col-5 justify-content-between">
+                        <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID" class="btn btn-outline-success">Add to Cart</a>
+                        <a asp-controller="Favourite" asp-action="RemoveProductFromFavourite" asp-route-id="@prod.Product.ID" class="btn btn-outline-secondary">Remove</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
- 
+        }
+    </div>
+}
+else
+{
+    <p>No favourites added yet.</p>
+}
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
