@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 sticky-top">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Shop Indie</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -77,10 +77,15 @@
             @RenderBody()
 
             @{
+
+                <a asp-controller='Products' asp-action='Create' target='_blank'></a>
                 if (ViewBag.message == "AddToFavourites")
                 {
                     //How do you add a controller/method to the below toast alert?
+                        
+                        
                     <script>
+
                         $(function () {
                     Command: toastr["success"]("<div><a href='https://codeseven.github.io/toastr/' target='_blank'>Click to View Favourites</a></div>", "Item Added to Favourites")
                             toastr.options = {
