@@ -32,47 +32,45 @@ else if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin") || User.IsInRole(
     </div>
 }
 
-<div class="p-3">
-    <ul class="nav nav-pills d-flex justify-content-around p-3 bg-light">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Filter Categories</a>
-            <div class="dropdown-menu">
-                @foreach (var catOption in @ViewBag.CatOptions)
-                {
-                    <a class="dropdown-item" asp-action="Index" asp-route-categoryOrder="@catOption">@catOption</a>
-                }
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filter Selection</a>
-            <div class="dropdown-menu">
-                @foreach (var selOption in @ViewBag.SelOptions)
-                {
-                    <a class="dropdown-item" asp-action="Index" asp-route-selectionOrder="@selOption">@selOption</a>
-                }
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort Products</a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Sort By Name Ascending</a>
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameDescending">Sort By Name Descending</a>
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByPriceAscending">Sort By Price: Lowest to Highest</a>
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByPriceDescending">Sort By Price: Highest to Lowest</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-    </ul>
 
-</div>
+<ul class="nav nav-pills d-flex justify-content-around p-3">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filter Categories</a>
+        <div class="dropdown-menu">
+            @foreach (var catOption in @ViewBag.CatOptions)
+            {
+                <a class="dropdown-item" asp-action="Index" asp-route-categoryOrder="@catOption">@catOption</a>
+            }
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Filter Selection</a>
+        <div class="dropdown-menu">
+            @foreach (var selOption in @ViewBag.SelOptions)
+            {
+                <a class="dropdown-item" asp-action="Index" asp-route-selectionOrder="@selOption">@selOption</a>
+            }
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort Products</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Sort By Name Ascending</a>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameDescending">Sort By Name Descending</a>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByPriceAscending">Sort By Price: Lowest to Highest</a>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByPriceDescending">Sort By Price: Highest to Lowest</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-action="Index" asp-route-order="ByNameAscending">Reset Filter</a>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+    </li>
+</ul>
 
 <div class="container">
     <div class="row justify-content-center">
