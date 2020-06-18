@@ -1,77 +1,84 @@
 ﻿
-<div>
-    <h3>Your Cart</h3>
-            @if (@ViewBag.cart != null)
-            {
-    <table class="table table-hover">
-        <caption>Your Basket</caption>
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">ID</th>
-                <th scope="col">Photo</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Sub Total</th>
-                <th scope="col">Option</th>
-            </tr>
-        </thead>
-        <tbody>
-                @foreach (var item in @ViewBag.cart)
-                {
-            <tr>
-                <th scope="row">@item.Product.Name</th>
-                <td>@item.Product.ID</td>
-                <td>
-                    @*Image Here*@
-                    <img class="rounded" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="150" height="150" />
-                </td>
-                <td>@item.Product.Price</td>
-                @if (item.Quantity > 1)
-                {
-                    <td class="d-flex justify-content-between">
-                        <a asp-controller="Cart" asp-action="ChangeQuantity" asp-route-id="@item.Product.ID" asp-route-quantityChange="minus" class="btn btn-light">-</a>
-                        <span class="p-1"> @item.Quantity </span>
-                        <a asp-controller="Cart" asp-action="ChangeQuantity" asp-route-id="@item.Product.ID" asp-route-quantityChange="plus" class="btn btn-light">+</a>
-                    </td>
-                }
-                else
-                {
-                    <td class="d-flex justify-content-end">
-                        <span class="p-1"> @item.Quantity </span>
-                        <a asp-controller="Cart"  asp-action="ChangeQuantity" asp-route-id="@item.Product.ID" asp-route-quantityChange="plus" class="btn btn-light">+</a>
-                    </td>
-                }
-                @if (ViewBag.Total > 0)
-                {
-                    <td>
-                        @{ var subTotalCalc = (@item.Product.Price * @item.Quantity);} 
-                        @subTotalCalc
-                    </td>
-                }
-                else
-                {
-                    <td>
-                    </td>
-                }
-                <td><a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.ID ">Remove</a></td>
-            </tr>
-                }
-        </tbody>
-            <tr>
-                <td align="right" class="col-6">Sum</td>
-                <td>
-                    @ViewBag.total
-                </td>
-            </tr>
-    </table>
-            }
+    <div>
+        <div class="p-4">
+            <h4 class="text-center">Your Cart</h4>
+        </div>
+        <hr />
 
-            else
-            {
+        @if (@ViewBag.cart != null)
+        {
+            <table class="table table-hover">
+                <caption>Your Basket</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Sub Total</th>
+                        <th scope="col">Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @ViewBag.cart)
+                    {
+                        <tr>
+                            <th scope="row">@item.Product.Name</th>
+                            <td>@item.Product.ID</td>
+                            <td>
+                                @*Image Here*@
+                                <img class="rounded" src="@("~/image/" + item.Product.Image.ImageName)" asp-append-version="true" width="150" height="150" />
+                            </td>
+                            <td>@item.Product.Price</td>
+                            @if (item.Quantity > 1)
+                            {
+                                <td class="d-flex justify-content-between">
+                                    <a asp-controller="Cart" asp-action="ChangeQuantity" asp-route-id="@item.Product.ID" asp-route-quantityChange="minus" class="btn btn-light">-</a>
+                                    <span class="p-1"> @item.Quantity </span>
+                                    <a asp-controller="Cart" asp-action="ChangeQuantity" asp-route-id="@item.Product.ID" asp-route-quantityChange="plus" class="btn btn-light">+</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="d-flex justify-content-end">
+                                    <span class="p-1"> @item.Quantity </span>
+                                    <a asp-controller="Cart" asp-action="ChangeQuantity" asp-route-id="@item.Product.ID" asp-route-quantityChange="plus" class="btn btn-light">+</a>
+                                </td>
+                            }
+                            @if (ViewBag.Total > 0)
+                            {
+                                <td>
+                                    @{ var subTotalCalc = (@item.Product.Price * @item.Quantity);}
+                                    @subTotalCalc
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                </td>
+                            }
+                            <td><a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.ID ">Remove</a></td>
+                        </tr>
+                    }
+                </tbody>
+                <tr>
+                    <td align="right" class="col-6">Sum</td>
+                    <td>
+                        @ViewBag.total
+                    </td>
+                </tr>
+            </table>
+        }
 
-            <h4>Your basket is empty.</h4>
-            }
-    <br />
-    <a asp-controller="ProductCategories" asp-action="Index">Continue Shopping</a>
-</div>
+        else
+        {
+            <div>
+                <p class="text-center">Your basket is empty.</p>
+            </div>
+        }
+        <br />
+        <div class="d-flex justify-content-around">
+            <a asp-controller="ProductCategories" asp-action="Index" class="btn-info p-2 text-center">Continue Shopping</a>
+        </div>
+    </div>

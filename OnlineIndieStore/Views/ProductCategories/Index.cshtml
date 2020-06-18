@@ -125,7 +125,7 @@
                     @*Cart Icon to appear on anything below 768px*@
                     <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID" class="btn btn-outline-success d-none d-lg-block">Add to Cart</a>
                     <div class="btn btn-outline-secondary d-block d-lg-none">
-                        <a asp-controller="Favourite" asp-action="AddProductToFavourite" asp-route-id="@prod.Product.ID">
+                        <a asp-controller="Cart" asp-action="Buy" asp-route-id="@prod.Product.ID">
                             <svg class="bi bi-basket" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M10.243 1.071a.5.5 0 0 1 .686.172l3 5a.5.5 0 1 1-.858.514l-3-5a.5.5 0 0 1 .172-.686zm-4.486 0a.5.5 0 0 0-.686.172l-3 5a.5.5 0 1 0 .858.514l3-5a.5.5 0 0 0-.172-.686z" />
                                 <path fill-rule="evenodd" d="M1 7v1h14V7H1zM.5 6a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5H.5z" />
